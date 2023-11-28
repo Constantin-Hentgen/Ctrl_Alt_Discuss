@@ -30,6 +30,7 @@ Make sure to install the necessary dependencies by running the following command
 
 ```bash
 pip install -r requirements.txt
+```
 
 ## Resources
 - OpenAI GPT-3.5-turbo: https://beta.openai.com/

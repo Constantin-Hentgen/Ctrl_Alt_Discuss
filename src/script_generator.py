@@ -2,7 +2,7 @@ from openai import OpenAI
 from json import loads
 
 # local imports
-from secrets import OPENAI_API_KEY_THB as OPENAI_API_KEY
+from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
 
 
 def generate_script(model: str, preprompt: str, prompt: str) -> str:
@@ -19,4 +19,4 @@ def generate_script(model: str, preprompt: str, prompt: str) -> str:
         ],
     )
 
-    return loads(response.choices[0].message.content)["response"]
+    return loads(response.choices[0].message.content)
