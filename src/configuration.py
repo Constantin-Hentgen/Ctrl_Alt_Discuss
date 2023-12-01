@@ -1,3 +1,5 @@
+ROOT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon"
+OUTPUT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon\output"
 GPT_MODEL = "gpt-3.5-turbo-1106"
 
 PRE_PROMPT = """
@@ -25,7 +27,9 @@ PRE_PROMPT = """
     
     {
         'title': <an appealing (and short) but clear title>,
-        'description': <a cool description of 3/4 sentences teasing the different point of the podcast>
+        'description': <a cool description of 3/4 sentences teasing the different point of the podcast>,
+        'thumbnail_prompt": <a prompt to generate a talking, pictorial miniature for listeners to grasp the theme>,
+        'folder_name':<a simple name based on the podcast title which is suitable for Windows and Linux system>,
         'script': [
             {
                 'name':'Alex',
@@ -41,3 +45,13 @@ PRE_PROMPT = """
     
     Here is the subject followed by some articles you will refer and discuss about :
  """
+
+# prompt = """
+#     various SQL injections techniques - cybersecurity and web hacking\n
+#     Google just been hacked this morning 1may 2023 by an SQL attack on its youtube server
+# """
+prompt = """
+Prompt injection within assistant bot : the risk of AI with AI hacking
+"""
+
+RSS_LIST = []

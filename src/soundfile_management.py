@@ -1,54 +1,69 @@
 from elevenlabs import generate, set_api_key, save, play, User, voices
 from pydub import AudioSegment
 from random import getrandbits
+from pydub import AudioSegment
 from openai import OpenAI
 from pathlib import Path
+from os.path import join
+from os import listdir
+from re import match
 
 # local imports
 from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
+from configuration import ROOT_PATH
 
 
-def generate_filename(is_openai: bool) -> str:
-    win_path = r"C:\Users\Constantin\Desktop\Podcast_Project\output"
-    path_universal = Path(win_path)
-    if is_openai:
-        filename = "openai_%032x.mp3" % getrandbits(128)
-    else:
-        filename = "xi-labs_%032x.mp3" % getrandbits(128)
-    return f"{path_universal}\\{filename}"
-
-
-def generate_audio_openai(script: str, voice: str) -> None:
+def generate_audio_openai(
+    script: str,
+    index: int,
+    folder_path: str,
+    voice: str,
+    sound_format: str = "mp3",
+) -> None:
     client = OpenAI(api_key=OPENAI_API_KEY)
     response = client.audio.speech.create(model="tts-1-hd", voice=voice, input=script)
+    filename = f"{index}_{voice}.{sound_format}"
+    response.stream_to_file(f"{folder_path}\\voices\\{filename}")
 
-    response.stream_to_file(generate_filename(is_openai=True))
 
-
-def generate_audio_xi_labs(script: str, voice: str):
+# to update to openai standards
+def generate_audio_xi_labs(script: str, index: int, voice: str = "Liam"):
     set_api_key(XI_API_KEY)
     audio = generate(
         text=script,
         voice=voice,  # "Bella",
         model="eleven_multilingual_v2",
     )
-
-    save(audio, generate_filename(is_openai=False))
-
-
-def overlay_sound_files():
-    sound1 = AudioSegment.from_mp3("/path/to/file1.mp3")
-    sound2 = AudioSegment.from_mp3("/path/to/file1.mp3")
-
-    # mix sound2 with sound1, starting at 5000ms into sound1)
-    output = sound1.overlay(sound2, position=5000)
-
-    # save the result
-    output.export("mixed_sounds.mp3", format="mp3")
+    filename = "xi-labs_%032x.mp3" % getrandbits(128)
+    save(audio, f"{path_universal}\\{filename}")
 
 
-def merge_files():
-    sound1 = AudioSegment.from_file("/path/to/sound.wav", format="wav")
-    sound2 = AudioSegment.from_file("/path/to/another_sound.wav", format="wav")
-    combined = sound1 + sound2
-    file_handle = combined.export("/path/to/output.mp3", format="mp3")
+def merge_sound_file(
+    folder_path: str, input_sound_format: str = "mp3", output_sound_format: str = "mp3"
+) -> None:
+    files = listdir(f"{folder_path}\\voices")
+    sound_file = [file for file in files if match(r"\d+_.+\.mp3", file)]
+    sound_file.sort(key=lambda x: int(match(r"(\d+)_", x).group(1)))
+    combined_audio = AudioSegment.silent()
+
+    for mp3_file in sound_file:
+        file_path = join(f"{folder_path}\\voices", mp3_file)
+        audio_segment = AudioSegment.from_mp3(file_path)
+        combined_audio += audio_segment
+
+    combined_audio.export(
+        f"{folder_path}\\premade.{output_sound_format}", format=output_sound_format
+    )
+
+
+def montage(podcast_folder: str):
+    intro_path = f"{ROOT_PATH}\\res\\intro.mp3"
+    outro_path = f"{ROOT_PATH}\\res\\outro.mp3"
+
+    intro = AudioSegment.from_file(intro_path)
+    podcast = AudioSegment.from_file(f"{podcast_folder}\\premade.mp3")
+    outro = AudioSegment.from_file(outro_path)
+
+    final_audio = intro + podcast + outro
+
+    final_audio.export(f"{podcast_folder}\\podcast.mp3", format="mp3")

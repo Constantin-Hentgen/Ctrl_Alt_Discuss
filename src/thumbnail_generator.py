@@ -1,15 +1,13 @@
 from openai import OpenAI
+from requests import get
 
 # local imports
 from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
 
 
-import requests
-
-
 def download_thumbnail(url: str, save_path: str) -> None:
     try:
-        response = requests.get(url)
+        response = get(url)
         if response.status_code == 200:
             with open(save_path, "wb") as file:
                 file.write(response.content)
@@ -22,11 +20,11 @@ def download_thumbnail(url: str, save_path: str) -> None:
 
 def generate_thumbnail(
     prompt: str,
+    path: str,
     quantity: int = 1,
     pixels: int = 1024,
     model: str = "dall-e-3",
     quality: str = "standard",
-    path: str = "thumbnail.png",
 ) -> None:
     client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -39,4 +37,4 @@ def generate_thumbnail(
     )
 
     thumbnail_url = response.data[0].url
-    download_thumbnail(url=thumbnail_url, save_path=path)
+    download_thumbnail(url=thumbnail_url, save_path=f"{path}\\thumbnail.png")
