@@ -15,6 +15,9 @@ from content_generator import generate_content
 if __name__ == "__main__":
     correspondance = {"Alex": "", "Emily": ""}
 
+    # let the time to initialize the prompt variable and get the article content
+    sleep(5)
+
     podcast_content = generate_content(
         model=GPT_MODEL, preprompt=PRE_PROMPT, prompt=prompt
     )
@@ -24,7 +27,10 @@ if __name__ == "__main__":
     songs_folder = f"{folder_path}\\voices"
     makedirs(f"{folder_path}\\voices")
 
-    generate_thumbnail(prompt=podcast_content["thumbnail_prompt"], path=folder_path)
+    generate_thumbnail(
+        prompt=f"{podcast_content['thumbnail_prompt']} (avoid writings and characters in the generation)",
+        path=folder_path,
+    )
 
     for index, item in enumerate(podcast_content["script"]):
         generate_audio_openai(

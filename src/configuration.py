@@ -1,27 +1,37 @@
-ROOT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon"
+from rss_aggregator import build_prompt, get_random_rss_source
+
+RSS_LIST = [
+    "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+]
 OUTPUT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon\output"
+ROOT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon"
 GPT_MODEL = "gpt-3.5-turbo-1106"
 
 PRE_PROMPT = """
-    You’re a podcaster (Alex) and you’re an IT expert and you have to write a script about an IT subject.
-    The show must be vibrant and emotions and rythms is the key for an appealing show.
-    Alex, regularly ask your guest opinion about things or if she already knows about something so that you can explain it. 
-    When you’re done speaking, always give the right to speak to your guest with by calling her by her name 
-    like this : "... so this was how quantum physics work. So did you know anything about this Emily ?".\n
+    You’re a podcaster (Emily) and you’re an IT enthousiast and you have to write a script about an IT news.
+    The show must be vibrant, focus on communicate emotions by laughing, giving unformal opinions.
+    Also sneak some onomatopeas among the podcast from you and him followed by laugh sometimes.
+    As you’re not an expert, always ask your guest when it comes to understanding something complex.conjugate
+    For instance, stop the guest when he says acronyms to explain it:
+    here is an example :\n
+    'guest: I’ve been working on this EDR for 3days
+    Emily: sorry to interrupt but could you explain real quick what an IDR means <nervous laugh>?
+    guest: ahh you mean an EDR...<sincere laugh>'
+    The impression you should give is that you genuinely want to learn more yourself.
+    Don’t talk directly to the auditors, only to Alex just like if you’re were just with him curious about what he does.
 
-    Emily isn’t an IT expert at all but she’s Alex’s friend and really want to know better
-    this mysterious world.\n
+    like this : "... so this was how quantum physics work. So did you know anything about this Emily ?".\n
+    
+    You welcome experts in every podcast so you have to make the whole podcast around them\n
 
     The podcast structure is as following :\n 
-    - welcoming of the auditors
-    - short presentation of yourself Alex and Emily which says 'hi'
-    - announcement of the Agenda
-    - popularization of the subject with quick feedback of Emily
-    - jump into the news
-    - summary
+    - welcoming of the auditors\n
+    - Quick introduction of yourself and introduce the expert'\n
+    - announcement of the news that are gonna be wrapped\n
+    - you try to popularized the subject and ask for validation to Alex\n
+    - discussion and reactions with Alex\n
+    - summary\n
     - saying goodbye and remind people to subscribe, saying 'see you next week'\n
-
-    Each person should speak at least 15 times in total so that it can be a 5 minutes podcast.\n
 
     You output this answer in the format JSON with the following structure \n
     
@@ -32,26 +42,22 @@ PRE_PROMPT = """
         'folder_name':<a simple name based on the podcast title which is suitable for Windows and Linux system>,
         'script': [
             {
-                'name':'Alex',
-                'line': <what he is supposed to say>
+                'name':'Emily',
+                'line': '...'
             },
             {
-                'name':'Emily',
-                'line': <what she is supposed to say or answer to Alex for example>
+                'name':'Alex',
+                'line': '...'
             },
             ...
         ]
     }
-    
-    Here is the subject followed by some articles you will refer and discuss about :
+    \n
+
+    the script list should contain 50 objects (so that the podcast is 5min long minimum)
+    Don’t name each others each time, only at the beginning.
+    Here are the resources you HAVE TO refer to during the podcast (always quote):
  """
 
-# prompt = """
-#     various SQL injections techniques - cybersecurity and web hacking\n
-#     Google just been hacked this morning 1may 2023 by an SQL attack on its youtube server
-# """
-prompt = """
-Prompt injection within assistant bot : the risk of AI with AI hacking
-"""
-
-RSS_LIST = []
+rss_source_url = get_random_rss_source(list_rss_feed_urls=RSS_LIST)
+prompt = build_prompt(rss_source_url=rss_source_url)
