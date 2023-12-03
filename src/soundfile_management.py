@@ -10,6 +10,8 @@ from re import match
 
 # local imports
 from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
+from secrets import XI_API_KEY
+
 from configuration import ROOT_PATH
 
 
@@ -27,15 +29,21 @@ def generate_audio_openai(
 
 
 # to update to openai standards
-def generate_audio_xi_labs(script: str, index: int, voice: str = "Liam"):
+def generate_audio_xi_labs(
+    script: str,
+    index: int,
+    folder_path: str,
+    voice: str = "Liam",
+    sound_format: str = "mp3",
+) -> None:
     set_api_key(XI_API_KEY)
     audio = generate(
         text=script,
         voice=voice,  # "Bella",
         model="eleven_multilingual_v2",
     )
-    filename = "xi-labs_%032x.mp3" % getrandbits(128)
-    save(audio, f"{path_universal}\\{filename}")
+    filename = f"{index}_{voice}.{sound_format}"
+    save(audio, f"{folder_path}\\voices\\{filename}")
 
 
 def merge_sound_file(

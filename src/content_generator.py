@@ -2,7 +2,7 @@ from openai import OpenAI
 from json import loads
 
 # local imports
-from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
+from secrets import OPENAI_API_KEY_THB as OPENAI_API_KEY
 
 
 def generate_content(model: str, preprompt: str, prompt: str) -> str:

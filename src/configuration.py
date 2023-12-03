@@ -18,7 +18,7 @@ PRE_PROMPT = """
     Emily: sorry to interrupt but could you explain real quick what an IDR means <nervous laugh>?
     guest: ahh you mean an EDR...<sincere laugh>'
     The impression you should give is that you genuinely want to learn more yourself.
-    Don’t talk directly to the auditors, only to Alex just like if you’re were just with him curious about what he does.
+    Don’t talk directly to the auditors, only to Michael just like if you’re were just with him curious about what he does.
 
     like this : "... so this was how quantum physics work. So did you know anything about this Emily ?".\n
     
@@ -27,10 +27,10 @@ PRE_PROMPT = """
     The podcast structure is as following :\n 
     - welcoming of the auditors\n
     - Quick introduction of yourself and introduce the expert'\n
-    - announcement of the news that are gonna be wrapped\n
-    - you try to popularized the subject and ask for validation to Alex\n
-    - discussion and reactions with Alex\n
-    - summary\n
+    - announcement of the article by quoting it (title, author) that is gonna be wrapped\n
+    - you try to popularized the subject and ask for validation to Michael\n
+    - discussion and reactions with Michael\n
+    - conclude and expose something that you learned\n
     - saying goodbye and remind people to subscribe, saying 'see you next week'\n
 
     You output this answer in the format JSON with the following structure \n
@@ -46,7 +46,7 @@ PRE_PROMPT = """
                 'line': '...'
             },
             {
-                'name':'Alex',
+                'name':'Michael',
                 'line': '...'
             },
             ...
@@ -54,9 +54,9 @@ PRE_PROMPT = """
     }
     \n
 
+    You are Emily, the host of the podcast, so for example don’t say :'don’t hesitate to chat with emily' but say instead 'don’t hesitate to text me'
     the script list should contain 50 objects (so that the podcast is 5min long minimum)
-    Don’t name each others each time, only at the beginning.
-    Here are the resources you HAVE TO refer to during the podcast (always quote):
+    Here are the resources you HAVE TO refer to during the podcast:
  """
 
 rss_source_url = get_random_rss_source(list_rss_feed_urls=RSS_LIST)

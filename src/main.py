@@ -6,15 +6,18 @@ from time import sleep
 from json import dump
 
 # local imports
-from soundfile_management import generate_audio_openai, merge_sound_file, montage
 from configuration import GPT_MODEL, PRE_PROMPT, prompt, OUTPUT_PATH
 from thumbnail_generator import generate_thumbnail
 from content_generator import generate_content
+from soundfile_management import (
+    generate_audio_openai,
+    generate_audio_xi_labs,
+    merge_sound_file,
+    montage,
+)
 
 
 if __name__ == "__main__":
-    correspondance = {"Alex": "", "Emily": ""}
-
     # let the time to initialize the prompt variable and get the article content
     sleep(5)
 
@@ -33,9 +36,16 @@ if __name__ == "__main__":
     )
 
     for index, item in enumerate(podcast_content["script"]):
-        generate_audio_openai(
+        # generate_audio_openai(
+        #     script=item["line"],
+        #     voice="onyx" if item["name"] == "Alex" else "nova",
+        #     index=index + 1,
+        #     folder_path=folder_path,
+        #     sound_format="mp3",
+        # )
+        generate_audio_xi_labs(
             script=item["line"],
-            voice="onyx" if item["name"] == "Alex" else "nova",
+            voice="Michael" if item["name"] == "Michael" else "Bella",
             index=index + 1,
             folder_path=folder_path,
             sound_format="mp3",
