@@ -6,9 +6,9 @@ from time import sleep
 from json import dump
 
 # local imports
-from configuration import GPT_MODEL, PRE_PROMPT, prompt, OUTPUT_PATH
 from thumbnail_generator import generate_thumbnail
-from content_generator import generate_content
+from content_generator import generate_podcast
+from configuration import OUTPUT_PATH
 from soundfile_management import (
     generate_audio_openai,
     generate_audio_xi_labs,
@@ -21,35 +21,33 @@ if __name__ == "__main__":
     # let the time to initialize the prompt variable and get the article content
     sleep(5)
 
-    podcast_content = generate_content(
-        model=GPT_MODEL, preprompt=PRE_PROMPT, prompt=prompt
-    )
+    podcast_content = generate_podcast()
 
-    folder_name = unidecode(podcast_content["folder_name"].replace(" ", "_"))
+    folder_name = unidecode(podcast_content["folder_name"])
     folder_path = f"{OUTPUT_PATH}\\{folder_name}"
     songs_folder = f"{folder_path}\\voices"
     makedirs(f"{folder_path}\\voices")
 
     generate_thumbnail(
-        prompt=f"{podcast_content['thumbnail_prompt']} (avoid writings and characters in the generation)",
+        prompt=podcast_content["thumbnail_prompt"],
         path=folder_path,
     )
 
     for index, item in enumerate(podcast_content["script"]):
-        # generate_audio_openai(
-        #     script=item["line"],
-        #     voice="onyx" if item["name"] == "Alex" else "nova",
-        #     index=index + 1,
-        #     folder_path=folder_path,
-        #     sound_format="mp3",
-        # )
-        generate_audio_xi_labs(
+        generate_audio_openai(
             script=item["line"],
-            voice="Michael" if item["name"] == "Michael" else "Bella",
+            voice="echo" if item["name"] == "Michael" else "nova",
             index=index + 1,
             folder_path=folder_path,
             sound_format="mp3",
         )
+        # generate_audio_xi_labs(
+        #     script=item["line"],
+        #     voice="Michael" if item["name"] == "Michael" else "Matilda",
+        #     index=index + 1,
+        #     folder_path=folder_path,
+        #     sound_format="mp3",
+        # )
         sleep(30)
 
     merge_sound_file(folder_path=folder_path)
