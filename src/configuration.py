@@ -6,6 +6,7 @@ RSS_LIST = [
 OUTPUT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon\output"
 ROOT_PATH = r"C:\Users\Constantin\Desktop\ByteBeacon"
 GPT_MODEL = "gpt-3.5-turbo-1106"
+STABLE_DIFFUSION_MODEL = "dall-e-3"
 
 # rss_source_url = get_random_rss_source(list_rss_feed_urls=RSS_LIST)
 # article = build_prompt(rss_source_url=rss_source_url)
@@ -46,6 +47,18 @@ PREPROMPT = (
     """
 )
 
+
+PREPROMPT_METADATA = """
+    Here is the structure of the JSON object you have to output.
+    {
+        'title': <an appealing (and short) but clear title>,
+        'description': <a cool description of 3/4 sentences teasing the different point of the podcast>,
+        'thumbnail_prompt": <a prompt to generate a talking, pictorial miniature for listeners to grasp the theme>,
+        'folder_name':<a simple name based on the podcast title which is suitable for Windows and Linux system in Pascal_Case>,
+    }
+
+    here is the source you have to base yourself to build this object :
+ """
 
 PROMPT_PLAN = """
     Output me a JSON object which contains the plan to the article in the system prompt.
@@ -90,17 +103,6 @@ PROMPT_PLAN = """
 
 """
 
-PREPROMPT_METADATA = """
-    Here is the structure of the JSON object you have to output.
-    {
-        'title': <an appealing (and short) but clear title>,
-        'description': <a cool description of 3/4 sentences teasing the different point of the podcast>,
-        'thumbnail_prompt": <a prompt to generate a talking, pictorial miniature for listeners to grasp the theme>,
-        'folder_name':<a simple name based on the podcast title which is suitable for Windows and Linux system in Pascal_Case>,
-    }
-
-    here is the source you have to base yourself to build this object :
- """
 
 PROMPT_INTRODUCTION = """
     You’re allowed to mention speakers names

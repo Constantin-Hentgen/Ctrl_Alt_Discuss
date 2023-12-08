@@ -1,6 +1,5 @@
 from openai import OpenAI
 from json import loads
-from time import sleep
 
 # local imports
 from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
@@ -46,8 +45,16 @@ def generate_metadata(plan: dict) -> dict:
 def generate_development(plan: dict) -> dict:
     plan_list = plan["plan"]
     development = []
+
     for part in plan_list:
-        development.append(generate_content(prompt=f"{PROMPT_DEVELOPMENT}\npart"))
+        temp_prompt = (
+            f"{PROMPT_DEVELOPMENT}"
+            f"\nthe name of the part you have to write is :"
+            f"{part['title']}"
+            f", and follow this instruction to write a good dialogue : "
+            f"{part['description']}"
+        )
+        development.append(generate_content(prompt=temp_prompt))
 
     return development
 

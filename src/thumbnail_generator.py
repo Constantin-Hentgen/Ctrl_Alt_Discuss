@@ -3,6 +3,7 @@ from requests import get
 
 # local imports
 from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
+from configuration import STABLE_DIFFUSION_MODEL
 
 
 def download_thumbnail(url: str, save_path: str) -> None:
@@ -23,7 +24,7 @@ def generate_thumbnail(
     path: str,
     quantity: int = 1,
     pixels: int = 1024,
-    model: str = "dall-e-3",
+    model: str = STABLE_DIFFUSION_MODEL,
     quality: str = "standard",
 ) -> None:
     client = OpenAI(api_key=OPENAI_API_KEY)
