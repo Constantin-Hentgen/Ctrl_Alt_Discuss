@@ -2,7 +2,6 @@ from openai import OpenAI
 from json import loads
 
 # local imports
-from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
 from configuration import (
     PREPROMPT_METADATA,
     PROMPT_CONCLUSION,
@@ -18,6 +17,7 @@ from configuration import (
 def generate_content(
     prompt: str, preprompt: str = PREPROMPT, model: str = GPT_MODEL
 ) -> str:
+    OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
     response = client.chat.completions.create(
         model=model,

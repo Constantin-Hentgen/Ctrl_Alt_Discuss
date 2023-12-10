@@ -24,6 +24,42 @@ Generated scripts are then converted into audio files using Eleven Labs' Text-to
 
 ## Configuration
 
+### Setting API Keys as Environment Variables
+
+Before running the project, you need to set the API keys as environment variables. Follow the steps below based on your operating system:
+
+#### Linux:
+
+1. Open a terminal window.
+
+2. Add the following lines to your shell profile file (e.g., `.bashrc`, `.zshrc`):
+
+    ```bash
+    export OPENAI_API_KEY="your_openai_api_key_here"
+    export XI_API_KEY="your_xi_api_key_here"
+    ```
+
+3. Save the file and run:
+
+    ```bash
+    source ~/.bashrc  # or source ~/.zshrc
+    ```
+
+#### Windows:
+
+1. Open a Command Prompt as an administrator.
+
+2. Run the following commands:
+
+    ```cmd
+    setx OPENAI_API_KEY "your_openai_api_key_here"
+    setx XI_API_KEY "your_xi_api_key_here"
+    ```
+
+    Replace `"your_openai_api_key_here"` and `"your_xi_api_key_here"` with your actual API keys.
+
+3. Close and reopen the Command Prompt.
+
 ### Installing Dependencies
 
 Make sure to install the necessary dependencies by running the following command:

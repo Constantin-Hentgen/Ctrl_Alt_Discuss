@@ -1,8 +1,8 @@
 from openai import OpenAI
 from requests import get
+from os import getenv
 
 # local imports
-from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
 from configuration import STABLE_DIFFUSION_MODEL
 
 
@@ -27,6 +27,7 @@ def generate_thumbnail(
     model: str = STABLE_DIFFUSION_MODEL,
     quality: str = "standard",
 ) -> None:
+    OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
 
     response = client.images.generate(

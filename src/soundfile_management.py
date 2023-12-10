@@ -5,13 +5,10 @@ from pydub import AudioSegment
 from openai import OpenAI
 from pathlib import Path
 from os.path import join
-from os import listdir
+from os import listdir, getenv
 from re import match
 
 # local imports
-from secrets import OPENAI_API_KEY_PERSO as OPENAI_API_KEY
-from secrets import XI_API_KEY
-
 from configuration import ROOT_PATH
 
 
@@ -22,6 +19,7 @@ def generate_audio_openai(
     voice: str,
     sound_format: str = "mp3",
 ) -> None:
+    OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
     response = client.audio.speech.create(model="tts-1-hd", voice=voice, input=script)
     filename = f"{index}_{voice}.{sound_format}"
@@ -36,6 +34,7 @@ def generate_audio_xi_labs(
     voice: str = "Liam",
     sound_format: str = "mp3",
 ) -> None:
+    XI_API_KEY = getenv("XI_API_KEY")
     set_api_key(XI_API_KEY)
     audio = generate(
         text=script,
