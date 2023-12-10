@@ -2,7 +2,7 @@
 name = "bytebeacon"
 version = "1.0.0"
 description = ""
-authors = ["Constantin Hentgen <constantin.hentgen@proton.me>"]
+authors = ["Constantin Hentgen"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
