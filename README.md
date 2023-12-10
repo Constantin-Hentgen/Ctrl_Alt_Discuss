@@ -24,9 +24,9 @@ Generated scripts are then converted into audio files using Eleven Labs' Text-to
 
 ## Configuration
 
-### Setting API Keys as Environment Variables
+### Setting Environment Variables
 
-Before running the project, you need to set the API keys as environment variables. Follow the steps below based on your operating system:
+Before running the project, you need to set the following environment variables. Follow the steps below based on your operating system:
 
 #### Linux:
 
@@ -37,7 +37,10 @@ Before running the project, you need to set the API keys as environment variable
     ```bash
     export OPENAI_API_KEY="your_openai_api_key_here"
     export XI_API_KEY="your_xi_api_key_here"
+    export BEACON_ROOT_PATH="/path/to/your/beacon"
     ```
+
+    Replace `"your_openai_api_key_here"`, `"your_xi_api_key_here"`, and `"/path/to/your/beacon"` with your actual API keys and the desired path for the Beacon root.
 
 3. Save the file and run:
 
@@ -54,11 +57,20 @@ Before running the project, you need to set the API keys as environment variable
     ```cmd
     setx OPENAI_API_KEY "your_openai_api_key_here"
     setx XI_API_KEY "your_xi_api_key_here"
+    setx BEACON_ROOT_PATH "C:\path\to\your\beacon"
     ```
 
-    Replace `"your_openai_api_key_here"` and `"your_xi_api_key_here"` with your actual API keys.
+    Replace `"your_openai_api_key_here"`, `"your_xi_api_key_here"`, and `"C:\path\to\your\beacon"` with your actual API keys and the desired path for the Beacon root.
 
 3. Close and reopen the Command Prompt.
+
+### Installing Dependencies
+
+Make sure to install the necessary dependencies by running the following command:
+
+```bash
+pip install -r requirements.txt
+
 
 ### Installing Dependencies
 
@@ -69,5 +81,5 @@ pip install -r requirements.txt
 ```
 
 ## Resources
-- OpenAI GPT-3.5-turbo: https://beta.openai.com/
+- OpenAI GPT-3.5-turbo: https://platform.openai.com/
 - Eleven Labs AI TTS: https://www.eleven-labs.ai/text-to-speech

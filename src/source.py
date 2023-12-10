@@ -61,9 +61,3 @@ def fetch_article_content(article_url: str) -> str:
     except requests.exceptions.RequestException as e:
         print(f"Error fetching article content: {e}")
         return None
-
-
-def build_prompt(rss_source_url: str) -> str:
-    article_url = get_latest_article_url(rss_source_url=rss_source_url)
-    content = fetch_article_content(article_url=article_url)
-    return content

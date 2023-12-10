@@ -13,43 +13,52 @@ from re import match
 
 
 # local imports
-from configuration import ROOT_PATH, OUTPUT_PATH
+from configuration import (
+    OPENAI_TTS_MODEL,
+    OPENAI_API_KEY,
+    XI_TTS_MODEL,
+    OUTPUT_PATH,
+    XI_API_KEY,
+    ROOT_PATH,
+)
 
 
 def generate_audio_openai(
+    sound_format: str,
+    folder_path: str,
     script: str,
     index: int,
-    folder_path: str,
     voice: str,
-    sound_format: str = "mp3",
 ) -> None:
-    OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
-    response = client.audio.speech.create(model="tts-1-hd", voice=voice, input=script)
+    response = client.audio.speech.create(
+        model=OPENAI_TTS_MODEL, voice=voice, input=script
+    )
+
     filename = f"{index}_{voice}.{sound_format}"
     response.stream_to_file(f"{folder_path}\\voices\\{filename}")
 
 
 def generate_audio_xi_labs(
+    sound_format: str,
+    folder_path: str,
     script: str,
     index: int,
-    folder_path: str,
-    voice: str = "Liam",
-    sound_format: str = "mp3",
+    voice: str,
 ) -> None:
-    XI_API_KEY = getenv("XI_API_KEY")
     set_api_key(XI_API_KEY)
     audio = generate(
+        model=XI_TTS_MODEL,
         text=script,
         voice=voice,
-        model="eleven_multilingual_v2",
     )
+
     filename = f"{index}_{voice}.{sound_format}"
     save(audio, f"{folder_path}\\voices\\{filename}")
 
 
 def merge_sound_file(
-    folder_path: str, input_sound_format: str = "mp3", output_sound_format: str = "mp3"
+    folder_path: str, input_sound_format: str, output_sound_format: str
 ) -> None:
     files = listdir(f"{folder_path}\\voices")
     sound_file = [
@@ -115,7 +124,11 @@ def generate_audio_file(
                 )
         sleep(openai_sleep)
 
-    merge_sound_file(folder_path=folder_path)
+    merge_sound_file(
+        folder_path=folder_path,
+        input_sound_format=sound_format,
+        output_sound_format=sound_format,
+    )
     rmtree(songs_folder)
     montage(podcast_folder=folder_path)
     remove(f"{folder_path}\\premade.{sound_format}")

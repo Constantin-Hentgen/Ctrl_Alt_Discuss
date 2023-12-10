@@ -3,7 +3,7 @@ from requests import get
 from os import getenv
 
 # local imports
-from configuration import STABLE_DIFFUSION_MODEL
+from configuration import IMAGE_MODEL, OPENAI_API_KEY
 
 
 def download_thumbnail(url: str, save_path: str) -> None:
@@ -24,12 +24,10 @@ def generate_thumbnail(
     folder_name: str,
     quantity: int = 1,
     pixels: int = 1024,
-    model: str = STABLE_DIFFUSION_MODEL,
+    model: str = IMAGE_MODEL,
     quality: str = "standard",
 ) -> None:
     print("Thumbnail generation...")
-
-    OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
 
     response = client.images.generate(
