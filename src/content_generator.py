@@ -2,6 +2,7 @@ from datetime import datetime
 from openai import OpenAI
 from json import loads
 from os import getenv
+from json import dump
 
 
 # local imports

@@ -1,12 +1,16 @@
 from elevenlabs import generate, set_api_key, save, play, User, voices
+from os import makedirs, remove
 from pydub import AudioSegment
 from random import getrandbits
 from pydub import AudioSegment
 from os import listdir, getenv
+from shutil import rmtree
 from openai import OpenAI
 from pathlib import Path
 from os.path import join
+from time import sleep
 from re import match
+
 
 # local imports
 from configuration import ROOT_PATH, OUTPUT_PATH

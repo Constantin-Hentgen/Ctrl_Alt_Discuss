@@ -1,9 +1,3 @@
-from os import makedirs, remove
-from shutil import rmtree
-from pathlib import Path
-from time import sleep
-from json import dump
-
 # local imports
 from thumbnail_generator import generate_thumbnail
 from content_generator import generate_podcast_content, generate_metadata
