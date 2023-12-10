@@ -1,3 +1,6 @@
+from time import sleep
+
+# local imports
 from rss_aggregator import build_prompt, get_random_rss_source, fetch_article_content
 
 RSS_LIST = [
@@ -13,11 +16,12 @@ STABLE_DIFFUSION_MODEL = "dall-e-3"
 
 custom_article_url = "https://www.nationalgeographic.com/history/history-magazine/article/roman-emperor-believed-god-assassinated"
 article = fetch_article_content(custom_article_url)
+sleep(5)
 
-# specialization subject : History
+# specialization subject : IT
 PREPROMPT = (
     """
-        You’re a podcast script writer specialized in History and you write specific part of the podcast on demand.
+        You’re a podcast script writer specialized in IT and you write specific part of the podcast on demand.
         In the podcast there are 2 people, the host Emily and the guest Michael which is an History expert NEVER MENTION THEIR NAME IF NOT AUTHORIZED BY THE USER.
         The goal of Emily is to make the specialist develop as much as possible on the chosen subject.
         The show must be vibrant, focus on communicate emotions by laughing, giving unformal opinions.
@@ -46,7 +50,6 @@ PREPROMPT = (
         Now generate the part that the user ask with the following instructions :
     """
 )
-
 
 PREPROMPT_METADATA = """
     Here is the structure of the JSON object you have to output.
@@ -100,7 +103,6 @@ PROMPT_PLAN = """
         }
     ]
 }
-
 """
 
 

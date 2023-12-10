@@ -1,10 +1,9 @@
 from elevenlabs import set_api_key, User
-
-# local imports
-from secrets import XI_API_KEY
+from os import getenv
 
 
 def xi_labs_characters_left() -> int:
+    XI_API_KEY = getenv("XI_API_KEY")
     set_api_key(XI_API_KEY)
     user = User.from_api()
     characters_left = (

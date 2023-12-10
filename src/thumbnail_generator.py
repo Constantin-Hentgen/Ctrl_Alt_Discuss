@@ -21,12 +21,14 @@ def download_thumbnail(url: str, save_path: str) -> None:
 
 def generate_thumbnail(
     prompt: str,
-    path: str,
+    folder_name: str,
     quantity: int = 1,
     pixels: int = 1024,
     model: str = STABLE_DIFFUSION_MODEL,
     quality: str = "standard",
 ) -> None:
+    print("Thumbnail generation...")
+
     OPENAI_API_KEY = getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -39,4 +41,6 @@ def generate_thumbnail(
     )
 
     thumbnail_url = response.data[0].url
-    download_thumbnail(url=thumbnail_url, save_path=f"{path}\\thumbnail.png")
+    download_thumbnail(
+        url=thumbnail_url, save_path=f"{OUTPUT_PATH}\\{folder_name}\\thumbnail.png"
+    )
