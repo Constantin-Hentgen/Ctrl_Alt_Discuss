@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Welcome to the Podcast Generator project! This project combines the powerful capabilities of OpenAI, Eleven Labs AI, and RSS feed aggregation to automatically create podcasts. The core of this solution relies on the GPT-3.5-turbo language model from OpenAI to generate podcast scripts, complemented by Eleven Labs' Text-to-Speech (TTS) to bring these scripts to life.
+Welcome to the ByteBeacon project! This project combines the powerful capabilities of OpenAI, Eleven Labs AI, and RSS feed aggregation to automatically create podcasts. The core of this solution relies on the GPT-3.5-turbo language model from OpenAI to generate podcast scripts, complemented by Eleven Labs' Text-to-Speech (TTS) to bring these scripts to life.
 
 ## Objective
 
-The goal of this project is to simplify podcast creation by automating the content generation process. By leveraging state-of-the-art natural language processing and speech technologies, we aim to provide an innovative and efficient podcasting experience.
+The goal of this project is to simplify podcast creation by automating the content generation process. By leveraging state-of-the-art natural language processing and speech technologies, aim to provide relevant and accurate content on demand.
 
 ## Features
 
@@ -24,62 +24,45 @@ Generated scripts are then converted into audio files using Eleven Labs' Text-to
 
 ## Configuration
 
+Make sure that you’re inside the virtual environement :
+```bash
+cd ByteBeacon
+poetry env list
+```
+Which should return a result such as  :
+`bytebeacon-Z2Ju98Sf-py3.11 (Activated)`
+
+Otherwise try the following command :
+```bash
+poetry env use env_name||python||python3||python3.X
+```
+
+### Installing Dependencies
+
+Make sure to install the necessary dependencies by running the following command:
+
+```bash
+cd ByteBeacon
+poetry install --no-root
+```
+
 ### Setting Environment Variables
 
-Before running the project, you need to set the following environment variables. Follow the steps below based on your operating system:
+```bash
+export POETRY_OPENAI_API_KEY="your_openai_api_key_here"
+export POETRY_XI_API_KEY="your_xi_api_key_here"
+export POETRY_BYTEBEACON_ROOT_PATH="/path/to/ByteBeacon"
+```
 
-#### Linux:
-
-1. Open a terminal window.
-
-2. Add the following lines to your shell profile file (e.g., `.bashrc`, `.zshrc`):
-
-    ```bash
-    export OPENAI_API_KEY="your_openai_api_key_here"
-    export XI_API_KEY="your_xi_api_key_here"
-    export BEACON_ROOT_PATH="/path/to/your/beacon"
-    ```
-
-    Replace `"your_openai_api_key_here"`, `"your_xi_api_key_here"`, and `"/path/to/your/beacon"` with your actual API keys and the desired path for the Beacon root.
-
-3. Save the file and run:
-
-    ```bash
-    source ~/.bashrc  # or source ~/.zshrc
-    ```
-
-#### Windows:
-
-1. Open a Command Prompt as an administrator.
-
-2. Run the following commands:
-
-    ```cmd
-    setx OPENAI_API_KEY "your_openai_api_key_here"
-    setx XI_API_KEY "your_xi_api_key_here"
-    setx BEACON_ROOT_PATH "C:\path\to\your\beacon"
-    ```
-
-    Replace `"your_openai_api_key_here"`, `"your_xi_api_key_here"`, and `"C:\path\to\your\beacon"` with your actual API keys and the desired path for the Beacon root.
-
-3. Close and reopen the Command Prompt.
-
-### Installing Dependencies
-
-Make sure to install the necessary dependencies by running the following command:
+### Run the project
 
 ```bash
-pip install -r requirements.txt
-
-
-### Installing Dependencies
-
-Make sure to install the necessary dependencies by running the following command:
-
-```bash
-pip install -r requirements.txt
+cd ByteBeacon
+poetry run python -i src/main.py
 ```
 
 ## Resources
 - OpenAI GPT-3.5-turbo: https://platform.openai.com/
+- OpenAI TTS: https://platform.openai.com/docs/guides/text-to-speech
 - Eleven Labs AI TTS: https://www.eleven-labs.ai/text-to-speech
+- Poetry: https://python-poetry.org/docs/
