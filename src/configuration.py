@@ -18,7 +18,7 @@ RSS_LIST = [
     "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
 ]
 article_url = "https://www.nationalgeographic.com/history/history-magazine/article/roman-emperor-believed-god-assassinated"
-article_content = fetch_article_content(custom_article_url)
+article_content = fetch_article_content(article_url=article_url)
 
 # rss_source_url = get_random_rss_source(list_rss_feed_urls=RSS_LIST)
 # article = build_prompt(rss_source_url=rss_source_url)

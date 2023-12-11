@@ -1,7 +1,7 @@
 # local imports
-from soundfile_management import generate_audio_file
-from thumbnail_generator import generate_thumbnail
 from content import generate_podcast_content
+from soundfile import generate_audio_file
+from thumbnail import generate_thumbnail
 
 
 def pipeline(
