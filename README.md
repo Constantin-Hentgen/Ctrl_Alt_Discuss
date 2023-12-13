@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the Ctr+Alt+Discuss project! This project combines the powerful capabilities of OpenAI, Eleven Labs AI, and RSS feed aggregation to automatically create podcasts. The core of this solution relies on the GPT-3.5-turbo language model from OpenAI to generate podcast scripts, complemented by Eleven Labs' Text-to-Speech (TTS) to bring these scripts to life.
+Welcome to the Ctrl+Alt+Discuss project! This project combines the powerful capabilities of OpenAI, Eleven Labs AI, and RSS feed aggregation to automatically create podcasts. The core of this solution relies on the GPT-3.5-turbo language model from OpenAI to generate podcast scripts, complemented by Eleven Labs' Text-to-Speech (TTS) to bring these scripts to life.
 
 ## Objective
 
@@ -26,11 +26,11 @@ Generated scripts are then converted into audio files using Eleven Labs' Text-to
 
 Make sure that you’re inside the virtual environement :
 ```bash
-cd Ctr+Alt+Discuss=
+cd Ctrl_Alt_Discuss
 poetry env list
 ```
 Which should return a result such as  :
-`Ctr+Alt+Discuss=-Z2Ju98Sf-py3.11 (Activated)`
+`ctrl_alt_discuss-Z2Ju98Sf-py3.11 (Activated)`
 
 Otherwise try the following command :
 ```bash
@@ -42,7 +42,7 @@ poetry env use env_name||python||python3||python3.X
 Make sure to install the necessary dependencies by running the following command:
 
 ```bash
-cd Ctr+Alt+Discuss=
+cd Ctrl_Alt_Discuss
 poetry install --no-root
 ```
 
@@ -51,13 +51,13 @@ poetry install --no-root
 ```bash
 export POETRY_OPENAI_API_KEY="your_openai_api_key_here"
 export POETRY_XI_API_KEY="your_xi_api_key_here"
-export POETRY_Ctr+Alt+Discuss=_ROOT_PATH="/path/to/Ctr+Alt+Discuss="
+export POETRY_CAD_ROOT_PATH="/path/to/Ctrl_Alt_Discuss"
 ```
 
 ### Run the project
 
 ```bash
-cd Ctr+Alt+Discuss=
+cd Ctrl_Alt_Discuss
 poetry run python -i src/main.py
 ```
 
