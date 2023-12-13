@@ -1,28 +1,43 @@
+from json import loads, dumps, dump
 from datetime import datetime
 from openai import OpenAI
-from json import loads
 from os import getenv
-from json import dump
+import sys
+
 
 # local imports
-from configuration import OPENAI_API_KEY, GPT_MODEL
+from configuration import OPENAI_API_KEY, GPT_MODEL, OUTPUT_PATH
 
+from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
+from prompts.development import SYSTEM_PROMPT as development_system_prompt
+from prompts.conclusion import SYSTEM_PROMPT as conclusion_system_prompt
+from prompts.plan import SYSTEM_PROMPT as plan_system_prompt
 from prompts.metadata import (
     SYSTEM_PROMPT as metadata_system_prompt,
 )
 
-from prompts.plan import SYSTEM_PROMPT as plan_system_prompt
-from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
 
-from prompts.development import (
-    SYSTEM_PROMPT as development_system_prompt,
-    PROMPT as development_prompt,
-)
+def content_validator(func):
+    def wrapper(*args, **kwargs):
+        while True:
+            display_name = func.__name__.replace("generate_", "").replace("_", " ")
+            print(f"Generating {display_name}...")
+            result = dumps(func(*args, **kwargs), indent=2)
+            print(f"\n{result}\n")
+            response = input(
+                "Are you satisfied with the result? (yes/retry/stop): "
+            ).lower()
+            if response == "yes":
+                break
+            elif response == "stop":
+                print("Stopping the program.")
+                sys.exit(0)
+            elif response != "retry":
+                print("Invalid response. Please enter 'yes', 'retry', or 'stop'.")
 
-from prompts.conclusion import (
-    SYSTEM_PROMPT as conclusion_system_prompt,
-    PROMPT as conclusion_prompt,
-)
+        print()
+
+    return wrapper
 
 
 def generate_content(system_prompt: str, prompt: str) -> str:
@@ -42,12 +57,12 @@ def generate_content(system_prompt: str, prompt: str) -> str:
     return loads(response.choices[0].message.content)
 
 
-def generate_plan(duration: int, depth_level: str, source: str, topic: str) -> list:
-    print("Plan generation...")
+@content_validator
+def generate_plan(duration: int, source: str, topic: str) -> list:
     number_of_parts = duration * 3
     prompt = (
         f"The plan should contains {number_of_parts} and has to popularize and explain the following topic : {topic}"
-        f"The target audience is {depth_level} in this subject so make the parts fit their expectations."
+        f"The target audience is ignorant in this subject so make the parts so focus on the popularization aspect."
     )
 
     if source is not None:
@@ -57,40 +72,42 @@ def generate_plan(duration: int, depth_level: str, source: str, topic: str) -> l
     return result["plan"]
 
 
-def generate_introduction(
-    plan: str, specialization: str, topic: str, reference: str
-) -> dict:
-    print("\tIntroduction generation...")
-    prompt = f"{plan}\n field of expertise : {specialization}\n main topic : {topic}\n reference: {reference}"
+@content_validator
+def generate_introduction(plan: str, topic: str, reference: str) -> dict:
+    prompt = f"{plan}\n main topic : {topic}\n reference: {reference}"
     return generate_content(system_prompt=introduction_system_prompt, prompt=prompt)
 
 
-def generate_development(plan: list) -> dict:
-    print("\tDevelopment generation")
+@content_validator
+def generate_development(plan: list, introduction: list) -> dict:
     development = []
 
     for part in plan:
-        temp_prompt = (
-            f"{PROMPT_DEVELOPMENT}"
+        prompt = (
             f"\nthe name of the part you have to write is :"
             f"{part['title']}"
-            f", and follow this instruction to write a good dialogue : "
+            f", with the following description : "
             f"{part['description']}"
+            f"here is the introduction of the podcast : {introduction}"
         )
-        development.append(generate_content(prompt=temp_prompt))
+        development.append(
+            generate_content(system_prompt=development_system_prompt, prompt=prompt)[
+                "script"
+            ]
+        )
 
+    development = [item for part in development for item in part]
     return development
 
 
-def generate_conclusion(development: str) -> dict:
-    print("\tIntroduction generation...")
-    return generate_content(
-        system_prompt=conclusion_system_prompt, prompt=conclusion_prompt
-    )
+@content_validator
+def generate_conclusion(introduction: str, development: list) -> dict:
+    prompt = f"introduction : {introduction}, development : {development}"
+    return generate_content(system_prompt=conclusion_system_prompt, prompt=prompt)
 
 
+@content_validator
 def generate_metadata(plan: dict) -> dict:
-    print("Metadata generation...")
     metadata_prompt = str(plan)
     metadata = generate_content(
         system_prompt=metadata_system_prompt, prompt=metadata_prompt
@@ -106,17 +123,8 @@ def generate_metadata(plan: dict) -> dict:
         "plan": plan,
         "thumbnail_prompt": metadata["thumbnail_prompt"],
         "folder_name": metadata["folder_name"],
-        "metadata_system_prompt": metadata_system_prompt,
-        "metadata_prompt": plan,
-        "plan_system_prompt": plan_system_prompt,
-        "plan_prompt": plan_prompt,
-        "introduction_system_prompt": introduction_system_prompt,
-        "introduction_prompt": introduction_prompt,
-        "development_system_prompt": development_system_prompt,
-        "development_prompt": development_prompt,
-        "conclusion_system_prompt": conclusion_system_prompt,
-        "conclusion_prompt": conclusion_prompt,
     }
+    return output
 
     json_file_path = f"{OUTPUT_PATH}\\{metadata['folder_name']}\\metadata.json"
 
@@ -124,45 +132,26 @@ def generate_metadata(plan: dict) -> dict:
         dump(metadata, json_file, indent=2)
 
 
-def generate_script(
-    plan: list, folder_name: str, reference: str, specialization: str, topic: str
-) -> list:
-    print("Script generation...")
-    introduction = generate_introduction(
-        plan=plan, reference=reference, specialization=specialization, topic=topic
-    )
-    development = generate_development(plan=plan)
-    conclusion = generate_conclusion(development=development)
-    output = (
-        introduction["script"]
-        + [line for chapter in development for line in chapter["script"]]
-        + conclusion["script"]
-    )
+def generate_script(plan: list, reference: str, topic: str) -> list:
+    introduction = generate_introduction(plan=plan, reference=reference, topic=topic)
+    development = generate_development(plan=plan, introduction=introduction)
+    conclusion = generate_conclusion(introduction=introduction, development=development)
 
-    json_file_path = f"{OUTPUT_PATH}\\{folder_name}\\script.json"
-
-    with open(json_file_path, "w") as json_file:
-        dump(output, json_file, indent=2)
-
+    output = introduction["script"] + development["script"] + conclusion["script"]
     return output
 
 
 def generate_podcast_content(
-    specialization: str,
-    depth_level: str,
     reference: str,
     duration: int,
     source: str,
     topic: str,
 ) -> dict:
-    plan = generate_plan(
-        duration=duration, depth_level=depth_level, source=source, topic=topic
-    )
+    plan = generate_plan(duration=duration, source=source, topic=topic)
     metadata = generate_metadata(plan=plan)
     script = generate_script(
         folder_name=metadata["folder_name"],
         reference=reference,
-        specialization=specialization,
         topic=topic,
     )
 

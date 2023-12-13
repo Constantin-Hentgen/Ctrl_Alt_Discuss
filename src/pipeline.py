@@ -6,15 +6,14 @@ from thumbnail import generate_thumbnail
 
 def pipeline(
     source: str,
-    depth_level: str,
     topic: str,
+    reference: str,
     sound_format: str = "mp3",
-    duration: int = 5,
-    specialization: str = "IT",
+    duration: int = 1,
     tts: str = "openai",
 ) -> None:
     podcast_content = generate_podcast_content(
-        duration=duration, depth_level=depth_level, source=source
+        reference=reference, duration=duration, source=source, topic=topic
     )
 
     generate_thumbnail(

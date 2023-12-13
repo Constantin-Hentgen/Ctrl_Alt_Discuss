@@ -8,10 +8,9 @@ if __name__ == "__main__":
 
     pipeline(
         sound_format="mp3",  # only format supported so far :/
-        duration=8,  # in minutes  (estimated)
-        depth_level="Expert",  # || Ignorant || Beginner || Hobbyist || Advanced || Expert
-        specialization="IT",  # || History || Mechanics || ...
+        duration=1,  # in minutes  (estimated)
         topic="ransomware",
         source=article_content,
+        reference="source : usine-digitale.fr | ransomware boeing touché par une attaque de lockbit",
         tts="openai",  # ||"xi-labs"
     )
