@@ -12,11 +12,7 @@ from prompts.metadata import (
 )
 
 from prompts.plan import SYSTEM_PROMPT as plan_system_prompt
-
-from prompts.introduction import (
-    SYSTEM_PROMPT as introduction_system_prompt,
-    PROMPT as introduction_prompt,
-)
+from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
 
 from prompts.development import (
     SYSTEM_PROMPT as development_system_prompt,
@@ -46,16 +42,49 @@ def generate_content(system_prompt: str, prompt: str) -> str:
     return loads(response.choices[0].message.content)
 
 
-def generate_plan(duration: int, depth_level: str, source: str) -> list:
+def generate_plan(duration: int, depth_level: str, source: str, topic: str) -> list:
     print("Plan generation...")
-    number_of_parts = 1
-    prompt = f"The plan should contains {number_of_parts} and the target audience is {depth_level} in this subject so make the parts fit their expectations.\n"
+    number_of_parts = duration * 3
+    prompt = (
+        f"The plan should contains {number_of_parts} and has to popularize and explain the following topic : {topic}"
+        f"The target audience is {depth_level} in this subject so make the parts fit their expectations."
+    )
 
     if source is not None:
         prompt += f"\n build the plan with this source : \n {source}"
 
     result = generate_content(system_prompt=plan_system_prompt, prompt=prompt)
     return result["plan"]
+
+
+def generate_introduction(plan: str, specialization: str, topic: str) -> dict:
+    print("\tIntroduction generation...")
+    prompt = f"{plan}\n field of expertise : {specialization}\n main topic : {topic}"
+    return generate_content(system_prompt=introduction_system_prompt, prompt=prompt)
+
+
+def generate_development(plan: list) -> dict:
+    print("\tDevelopment generation")
+    development = []
+
+    for part in plan:
+        temp_prompt = (
+            f"{PROMPT_DEVELOPMENT}"
+            f"\nthe name of the part you have to write is :"
+            f"{part['title']}"
+            f", and follow this instruction to write a good dialogue : "
+            f"{part['description']}"
+        )
+        development.append(generate_content(prompt=temp_prompt))
+
+    return development
+
+
+def generate_conclusion(development: str) -> dict:
+    print("\tIntroduction generation...")
+    return generate_content(
+        system_prompt=conclusion_system_prompt, prompt=conclusion_prompt
+    )
 
 
 def generate_metadata(plan: dict) -> dict:
@@ -93,42 +122,11 @@ def generate_metadata(plan: dict) -> dict:
         dump(metadata, json_file, indent=2)
 
 
-def generate_development(plan: list) -> dict:
-    print("\tDevelopment generation")
-    development = []
-
-    for part in plan:
-        temp_prompt = (
-            f"{PROMPT_DEVELOPMENT}"
-            f"\nthe name of the part you have to write is :"
-            f"{part['title']}"
-            f", and follow this instruction to write a good dialogue : "
-            f"{part['description']}"
-        )
-        development.append(generate_content(prompt=temp_prompt))
-
-    return development
-
-
-def generate_introduction() -> dict:
-    print("\tIntroduction generation...")
-    return generate_content(
-        system_prompt=introduction_system_prompt, prompt=introduction_prompt
-    )
-
-
-def generate_conclusion() -> dict:
-    print("\tIntroduction generation...")
-    return generate_content(
-        system_prompt=conclusion_system_prompt, prompt=conclusion_prompt
-    )
-
-
 def generate_script(plan: list, folder_name: str) -> list:
     print("Script generation...")
-    introduction = generate_introduction()
-    development = generate_development(plan)
-    conclusion = generate_conclusion()
+    introduction = generate_introduction(plan=plan)
+    development = generate_development(plan=plan)
+    conclusion = generate_conclusion(development=development)
     output = (
         introduction["script"]
         + [line for chapter in development for line in chapter["script"]]

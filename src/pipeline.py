@@ -7,6 +7,7 @@ from thumbnail import generate_thumbnail
 def pipeline(
     source: str,
     depth_level: str,
+    topic: str,
     sound_format: str = "mp3",
     duration: int = 5,
     specialization: str = "IT",
