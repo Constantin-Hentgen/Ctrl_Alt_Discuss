@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bytebeacon"
+name = "ctrl_alt_discuss"
 version = "1.0.0"
 description = ""
 authors = ["Constantin Hentgen"]

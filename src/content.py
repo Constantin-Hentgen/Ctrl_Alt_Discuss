@@ -57,9 +57,11 @@ def generate_plan(duration: int, depth_level: str, source: str, topic: str) -> l
     return result["plan"]
 
 
-def generate_introduction(plan: str, specialization: str, topic: str) -> dict:
+def generate_introduction(
+    plan: str, specialization: str, topic: str, reference: str
+) -> dict:
     print("\tIntroduction generation...")
-    prompt = f"{plan}\n field of expertise : {specialization}\n main topic : {topic}"
+    prompt = f"{plan}\n field of expertise : {specialization}\n main topic : {topic}\n reference: {reference}"
     return generate_content(system_prompt=introduction_system_prompt, prompt=prompt)
 
 
@@ -122,9 +124,13 @@ def generate_metadata(plan: dict) -> dict:
         dump(metadata, json_file, indent=2)
 
 
-def generate_script(plan: list, folder_name: str) -> list:
+def generate_script(
+    plan: list, folder_name: str, reference: str, specialization: str, topic: str
+) -> list:
     print("Script generation...")
-    introduction = generate_introduction(plan=plan)
+    introduction = generate_introduction(
+        plan=plan, reference=reference, specialization=specialization, topic=topic
+    )
     development = generate_development(plan=plan)
     conclusion = generate_conclusion(development=development)
     output = (
@@ -141,10 +147,24 @@ def generate_script(plan: list, folder_name: str) -> list:
     return output
 
 
-def generate_podcast_content(duration: int, depth_level: str, source: str) -> dict:
-    plan = generate_plan(duration=duration, depth_level=depth_level, source=source)
+def generate_podcast_content(
+    specialization: str,
+    depth_level: str,
+    reference: str,
+    duration: int,
+    source: str,
+    topic: str,
+) -> dict:
+    plan = generate_plan(
+        duration=duration, depth_level=depth_level, source=source, topic=topic
+    )
     metadata = generate_metadata(plan=plan)
-    script = generate_script(folder_name=metadata["folder_name"])
+    script = generate_script(
+        folder_name=metadata["folder_name"],
+        reference=reference,
+        specialization=specialization,
+        topic=topic,
+    )
 
     return {
         "title": metadata["title"],
