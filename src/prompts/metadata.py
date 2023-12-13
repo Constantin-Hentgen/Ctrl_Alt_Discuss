@@ -1,4 +1,4 @@
-PREPROMPT = """
+SYSTEM_PROMPT = """
     Here is the structure of the JSON object you have to output.
     {
         'title': <an appealing (and short) but clear title>,
