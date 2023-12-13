@@ -2,6 +2,7 @@
 from content import generate_podcast_content
 from soundfile import generate_audio_file
 from thumbnail import generate_thumbnail
+from api_management import is_xi_possible
 
 
 def pipeline(
@@ -9,11 +10,9 @@ def pipeline(
     topic: str,
     reference: str,
     sound_format: str = "mp3",
-    duration: int = 1,
-    tts: str = "openai",
 ) -> None:
     podcast_content = generate_podcast_content(
-        reference=reference, duration=duration, source=source, topic=topic
+        reference=reference, source=source, topic=topic
     )
 
     generate_thumbnail(
@@ -21,6 +20,17 @@ def pipeline(
         folder_name=podcast_content["folder_name"],
     )
 
-    generate_audio_file(script=podcast_content["script"], sound_format=sound_format)
+    tts = "openai"
+    if is_xi_possible(script=podcast_content["script"]):
+        choice = input("\nXI-labs possible, openai/xi-labs: ")
+        if choice == "xi-labs":
+            tts = "xi-labs"
 
-    print("Podcast ready to be uploaded :)")
+    generate_audio_file(
+        script=podcast_content["script"],
+        sound_format=sound_format,
+        folder_name=podcast_content["folder_name"],
+        tts=tts,
+    )
+
+    print(f"Podcast {podcast_content['folder_name']} ready to be uploaded :)")

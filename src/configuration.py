@@ -1,7 +1,7 @@
 from os import getenv
 
 # local imports
-from source import fetch_article_content
+from rss import fetch_article_content
 
 ROOT_PATH = getenv("POETRY_CAD_ROOT_PATH")
 OUTPUT_PATH = rf"{ROOT_PATH}\output"
@@ -13,3 +13,4 @@ XI_API_KEY = getenv("POETRY_XI_API_KEY")
 
 OPENAI_TTS_MODEL = "tts-1-hd"
 XI_TTS_MODEL = "eleven_multilingual_v2"
+PLAN_SIZE = 3

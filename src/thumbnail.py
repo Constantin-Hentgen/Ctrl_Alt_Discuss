@@ -1,9 +1,8 @@
 from openai import OpenAI
 from requests import get
-from os import getenv
 
 # local imports
-from configuration import IMAGE_MODEL, OPENAI_API_KEY
+from configuration import IMAGE_MODEL, OPENAI_API_KEY, OUTPUT_PATH
 
 
 def download_thumbnail(url: str, save_path: str) -> None:

@@ -1,4 +1,7 @@
 SYSTEM_PROMPT = """
+    You’re a podcast script writer specialized in IT and you write now the metadata of the script.
+    The name of the podcast is 'Ctrl Alt Discuss' and there are 2 people, the host Chloe and the guest Michael which is an expert in cybersecurity.
+
     Here is the structure of the JSON object you have to output.
     {
         'title': <an appealing (and short) but clear title>,
