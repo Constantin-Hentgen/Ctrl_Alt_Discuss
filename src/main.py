@@ -3,13 +3,14 @@ from rss import fetch_article_content
 from pipeline import pipeline
 
 if __name__ == "__main__":
-    article_url = "https://www.malwarebytes.com/wannacry#:~:text=The%20WannaCry%20attackers%20encrypted%20Windows,150%20countries%20in%20just%20hours."
+    article_url = "https://www.avast.com/c-eternalblue?redirect=1"
     article_content = fetch_article_content(article_url=article_url)
 
     pipeline(
         sound_format="mp3",  # only format supported so far :/
-        topic="Wannacry story : What was wannacry ransomware attack ?",
+        topic="EternalBlue, the cyberattack nightmare",
         source=article_content,
-        reference="source : malwarebytes.com | What was the WannaCry ransomware attack? ",
+        reference="source : avast.com | What Is EternalBlue and Why Is the MS17-010 Exploit Still Relevant? ",
         with_thumbnail=False,
+        article_url=article_url,
     )

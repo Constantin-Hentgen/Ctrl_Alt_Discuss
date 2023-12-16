@@ -8,12 +8,13 @@ from api_management import is_xi_possible
 def pipeline(
     source: str,
     topic: str,
+    article_url: str,
     reference: str,
     sound_format: str = "mp3",
     with_thumbnail: bool = False,
 ) -> None:
     podcast_content = generate_podcast_content(
-        reference=reference, source=source, topic=topic
+        reference=reference, source=source, topic=topic, article_url=article_url
     )
 
     if with_thumbnail:

@@ -7,7 +7,7 @@ SYSTEM_PROMPT = """
         'title': <an short and clear title based on the topic>,
         'description': <a cool description of 3/4 sentences teasing the different point of the podcast>,
         'thumbnail_prompt": <a prompt to generate a pictorial miniature/logo/symbol in a cartoon style to grasp the theme>,
-        'folder_name':<the title in Pascal_Case>,
+        'folder_name':<the title (suitable for a Windows/Linux filesystem)>,
     }
 
     Expect a plan and a topic from the user

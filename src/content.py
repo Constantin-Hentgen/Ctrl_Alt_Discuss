@@ -1,12 +1,20 @@
 from json import loads, dumps, dump
 from datetime import datetime
+import requests
 from openai import OpenAI
 from os import makedirs
 import sys
 
 
 # local imports
-from configuration import OPENAI_API_KEY, GPT_MODEL, OUTPUT_PATH, PLAN_SIZE
+from configuration import (
+    OPENAI_API_KEY,
+    GPT_MODEL,
+    OUTPUT_PATH,
+    PLAN_SIZE,
+    GITHUB_REPO,
+    GITHUB_REPO_OWNER,
+)
 
 from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
 from prompts.development import SYSTEM_PROMPT as development_system_prompt
@@ -40,6 +48,19 @@ def content_validator(func):
         return result
 
     return wrapper
+
+
+def get_latest_release_tag():
+    url = f"https://api.github.com/repos/{GITHUB_REPO_OWNER}/{GITHUB_REPO}/releases/latest"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        release_data = response.json()
+        tag_name = release_data.get("tag_name")
+        return tag_name
+    else:
+        print(f"Failed to retrieve latest release. Status code: {response.status_code}")
+        return None
 
 
 def generate_content(system_prompt: str, prompt: str) -> str:
@@ -113,7 +134,7 @@ def generate_conclusion(introduction: str, development: list) -> list:
 
 
 @content_validator
-def generate_metadata(plan: dict, topic: str) -> dict:
+def generate_metadata(plan: dict, topic: str, article_url: str) -> dict:
     metadata_prompt = f"plan: {plan}\n topic: {topic}"
     metadata = generate_content(
         system_prompt=metadata_system_prompt, prompt=metadata_prompt
@@ -121,11 +142,14 @@ def generate_metadata(plan: dict, topic: str) -> dict:
 
     now = datetime.now()
     formatted_time = now.strftime("%d/%m/%Y %H:%M:%S")
+    version = get_latest_release_tag()
 
     output = {
         "datetime": formatted_time,
+        "version": version,
         "title": metadata["title"],
         "description": metadata["description"],
+        "article_url": article_url,
         "plan": plan,
         "thumbnail_prompt": metadata["thumbnail_prompt"],
         "folder_name": metadata["folder_name"],
@@ -135,27 +159,32 @@ def generate_metadata(plan: dict, topic: str) -> dict:
 
 
 def generate_podcast_content(
-    reference: str,
-    source: str,
-    topic: str,
+    reference: str, source: str, topic: str, article_url: str
 ) -> dict:
     plan = generate_plan(source=source, topic=topic)
     introduction = generate_introduction(plan=plan, reference=reference, topic=topic)
     development = generate_development(introduction=introduction, plan=plan)
     conclusion = generate_conclusion(introduction=introduction, development=development)
-    metadata = generate_metadata(plan=plan)
+    metadata = generate_metadata(plan=plan, topic=topic, article_url=article_url)
+
+    script = introduction + development + conclusion
 
     podcast_path = f"{OUTPUT_PATH}\\{metadata['folder_name']}"
     makedirs(podcast_path)
-    json_file_path = f"{podcast_path}\\metadata.json"
+    metadata_path = f"{podcast_path}\\metadata.json"
 
-    with open(json_file_path, "w") as json_file:
+    with open(metadata_path, "w") as json_file:
         dump(metadata, json_file, indent=2)
+
+    script_path = f"{podcast_path}\\script.json"
+
+    with open(script_path, "w") as json_file:
+        dump(script, json_file, indent=2)
 
     return {
         "title": metadata["title"],
         "description": metadata["description"],
         "thumbnail_prompt": f"{metadata['thumbnail_prompt']}\n NO WRITING or INSCRIPTIONS",
         "folder_name": metadata["folder_name"],
-        "script": introduction + development + conclusion,
+        "script": script,
     }
