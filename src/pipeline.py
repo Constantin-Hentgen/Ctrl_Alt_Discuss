@@ -10,15 +10,17 @@ def pipeline(
     topic: str,
     reference: str,
     sound_format: str = "mp3",
+    with_thumbnail: bool = False,
 ) -> None:
     podcast_content = generate_podcast_content(
         reference=reference, source=source, topic=topic
     )
 
-    generate_thumbnail(
-        prompt=podcast_content["thumbnail_prompt"],
-        folder_name=podcast_content["folder_name"],
-    )
+    if with_thumbnail:
+        generate_thumbnail(
+            prompt=podcast_content["thumbnail_prompt"],
+            folder_name=podcast_content["folder_name"],
+        )
 
     tts = "openai"
     if is_xi_possible(script=podcast_content["script"]):

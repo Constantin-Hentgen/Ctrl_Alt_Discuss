@@ -24,7 +24,7 @@ SYSTEM_PROMPT = """
         You’re not allowed to mention the speakers names but in the JSON Object just write Chloe instead of Host and Michael instead of Guest.
         The Host should introduce the part of the plan which is gonna be touched upon.
         The Host should barely talk, just asking the expert and let him speak.
-        There should be around 8 items in the script list.
+        There should be 6 items in the script list.
         in the line attribute never use the word 'Chloe' or 'Michael'
         The host question should be transitioning from the last answer of the guest.
         just return the new content, not the introduction content.

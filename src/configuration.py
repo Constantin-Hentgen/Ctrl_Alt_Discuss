@@ -1,8 +1,5 @@
 from os import getenv
 
-# local imports
-from rss import fetch_article_content
-
 ROOT_PATH = getenv("POETRY_CAD_ROOT_PATH")
 OUTPUT_PATH = rf"{ROOT_PATH}\output"
 

@@ -3,6 +3,7 @@ from requests import get
 
 # local imports
 from configuration import IMAGE_MODEL, OPENAI_API_KEY, OUTPUT_PATH
+from content import content_validator
 
 
 def download_thumbnail(url: str, save_path: str) -> None:
@@ -18,6 +19,7 @@ def download_thumbnail(url: str, save_path: str) -> None:
         print(f"An error occurred: {e}")
 
 
+@content_validator
 def generate_thumbnail(
     prompt: str,
     folder_name: str,

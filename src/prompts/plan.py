@@ -1,7 +1,7 @@
 SYSTEM_PROMPT = """
     In the context of a podcast IT you generate metadata.
     Output a JSON object which contains the plan of the article.
-    The user is going to specify the number of parts and the level of complexity of the parts.
+    You have to make it a story telling line.
 
     Here’s an example:
 

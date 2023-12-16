@@ -113,8 +113,8 @@ def generate_conclusion(introduction: str, development: list) -> list:
 
 
 @content_validator
-def generate_metadata(plan: dict) -> dict:
-    metadata_prompt = str(plan)
+def generate_metadata(plan: dict, topic: str) -> dict:
+    metadata_prompt = f"plan: {plan}\n topic: {topic}"
     metadata = generate_content(
         system_prompt=metadata_system_prompt, prompt=metadata_prompt
     )
