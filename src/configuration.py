@@ -1,4 +1,8 @@
+from dotenv import load_dotenv
 from os import getenv
+
+# Load environment variables from .env file, if it exists
+load_dotenv()
 
 ROOT_PATH = getenv("POETRY_CAD_ROOT_PATH")
 OUTPUT_PATH = rf"{ROOT_PATH}\output"

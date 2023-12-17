@@ -104,16 +104,20 @@ def generate_introduction(plan: str, topic: str, reference: str) -> list:
 
 
 @content_validator
-def generate_development(plan: list, introduction: list) -> list:
+def generate_development(plan: list, introduction: list, source: str) -> list:
     development = []
 
     for part in plan:
-        prompt = (
-            f"\nthe name of the part you have to write is :"
-            f"{part['title']}"
-            f", with the following description : "
-            f"{part['description']}"
-            f"here is the introduction of the podcast : {introduction}"
+        prompt = str(
+            (
+                f"\nthe name of the part you have to write is :"
+                f"{part['title']}"
+                f", with the following description : "
+                f"{part['description']}"
+                f"here is the introduction of the podcast : {introduction}",
+                f"\n Here is the source article content:",
+                f"{source}",
+            )
         )
         development.append(
             generate_content(system_prompt=development_system_prompt, prompt=prompt)[
@@ -163,7 +167,9 @@ def generate_podcast_content(
 ) -> dict:
     plan = generate_plan(source=source, topic=topic)
     introduction = generate_introduction(plan=plan, reference=reference, topic=topic)
-    development = generate_development(introduction=introduction, plan=plan)
+    development = generate_development(
+        introduction=introduction, plan=plan, source=source
+    )
     conclusion = generate_conclusion(introduction=introduction, development=development)
     metadata = generate_metadata(plan=plan, topic=topic, article_url=article_url)
 

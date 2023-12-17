@@ -4,7 +4,7 @@ SYSTEM_PROMPT = """
 
     Here is the structure of the JSON object you have to output.
     {
-        'title': <an short and clear title based on the topic>,
+        'title': <an short and clear title based on the topic in max 5 words>,
         'description': <a cool description of 3/4 sentences teasing the different point of the podcast>,
         'thumbnail_prompt": <a prompt to generate a pictorial miniature/logo/symbol in a cartoon style to grasp the theme>,
         'folder_name':<the title (suitable for a Windows/Linux filesystem)>,
