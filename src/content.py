@@ -41,7 +41,7 @@ def content_validator(func):
             elif response == "stop":
                 print("Stopping the program.")
                 sys.exit(0)
-            elif response != "retry":
+            else:
                 print("Invalid response. Please enter 'yes', 'retry', or 'stop'.")
 
         print()
@@ -151,6 +151,8 @@ def generate_metadata(plan: dict, topic: str, article_url: str) -> dict:
     output = {
         "datetime": formatted_time,
         "version": version,
+        "llm": GPT_MODEL,
+        "tts": XI_TTS_MODEL,
         "title": metadata["title"],
         "description": metadata["description"],
         "article_url": article_url,
@@ -173,7 +175,9 @@ def generate_podcast_content(
     conclusion = generate_conclusion(introduction=introduction, development=development)
     metadata = generate_metadata(plan=plan, topic=topic, article_url=article_url)
 
-    script = introduction + development + conclusion
+    silence = {"name": "Silence"}
+
+    script = introduction + silence + development + silence + conclusion
 
     podcast_path = f"{OUTPUT_PATH}\\{metadata['folder_name']}"
     makedirs(podcast_path)

@@ -12,7 +12,6 @@ IMAGE_MODEL = "dall-e-3"
 OPENAI_API_KEY = getenv("POETRY_OPENAI_API_KEY")
 XI_API_KEY = getenv("POETRY_XI_API_KEY")
 
-OPENAI_TTS_MODEL = "tts-1-hd"
 XI_TTS_MODEL = "eleven_multilingual_v2"
 PLAN_SIZE = 3
 GITHUB_REPO = "Ctrl_Alt_Discuss"

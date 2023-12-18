@@ -2,7 +2,6 @@
 from content import generate_podcast_content
 from soundfile import generate_audio_file
 from thumbnail import generate_thumbnail
-from api_management import is_xi_possible
 from rss import fetch_article_content
 
 
@@ -29,17 +28,10 @@ def pipeline(
         )
 
     if with_audio:
-        tts = "openai"
-        if is_xi_possible(script=podcast_content["script"]):
-            choice = input("\nxi-labs possible, openai/xi-labs: ")
-            if choice == "xi-labs":
-                tts = "xi-labs"
-
         generate_audio_file(
             script=podcast_content["script"],
             sound_format=sound_format,
             folder_name=podcast_content["folder_name"],
-            tts=tts,
         )
 
     print(f"Podcast {podcast_content['folder_name']} ready to be uploaded :)")

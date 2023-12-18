@@ -1,6 +1,14 @@
-SYSTEM_PROMPT = """
+from personas.personas import PERSONAS
+
+SYSTEM_PROMPT = (
+    f"""
         You’re a podcast script writer and you write now the conclusion script.
         The name of the podcast is 'Ctrl Alt Discuss' and there are 2 people, the host Chloe and the guest Michael which is an expert in cybersecurity.
+
+        {PERSONAS}
+    """
+    + """
+
         the output is in the format JSON with the following structure 
 
         {
@@ -22,3 +30,4 @@ SYSTEM_PROMPT = """
         Then the host conclude and thanks the auditors for listening + close the podcast with a catchy sentence to end on a happy note.
         You should expect the user to input the introduction script and development script.
     """
+)

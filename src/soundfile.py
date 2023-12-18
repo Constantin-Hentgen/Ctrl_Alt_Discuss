@@ -3,7 +3,6 @@ from os import makedirs, remove, listdir
 from pydub import AudioSegment
 from random import getrandbits
 from shutil import rmtree
-from openai import OpenAI
 from pathlib import Path
 from os.path import join
 from time import sleep
@@ -11,29 +10,11 @@ from re import match
 
 # local imports
 from configuration import (
-    OPENAI_TTS_MODEL,
-    OPENAI_API_KEY,
     XI_TTS_MODEL,
     OUTPUT_PATH,
     XI_API_KEY,
     ROOT_PATH,
 )
-
-
-def generate_audio_openai(
-    sound_format: str,
-    folder_name: str,
-    script: str,
-    index: int,
-    voice: str,
-) -> None:
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    response = client.audio.speech.create(
-        model=OPENAI_TTS_MODEL, voice=voice, input=script
-    )
-
-    filename = f"{index}_{voice}.{sound_format}"
-    response.stream_to_file(f"{OUTPUT_PATH}\\{folder_name}\\voices\\{filename}")
 
 
 def generate_audio_xi_labs(
@@ -57,31 +38,30 @@ def generate_audio_xi_labs(
 def generate_audio_file(
     script: list,
     folder_name: str,
-    tts: str = "openai",
-    openai_sleep: int = 30,
+    api_sleep: int = 30,
     sound_format="mp3",
 ) -> None:
     makedirs(f"{OUTPUT_PATH}\\{folder_name}\\voices")
 
+    increment = 0
     for index, item in enumerate(script):
-        match tts:
-            case "openai":
-                generate_audio_openai(
-                    script=item["line"],
-                    voice="echo" if item["name"] == "Michael" else "nova",
-                    index=index + 1,
-                    folder_name=folder_name,
-                    sound_format=sound_format,
-                )
-            case "xi-labs":
-                generate_audio_xi_labs(
-                    script=item["line"],
-                    voice="Michael" if item["name"] == "Michael" else "Matilda",
-                    index=index + 1,
-                    folder_name=folder_name,
-                    sound_format=sound_format,
-                )
-        sleep(openai_sleep)
+        if item["name"] == "Silence":
+            silence_path = f"{ROOT_PATH}\\res\\second_of_silence.mp3"
+            silence = AudioSegment.from_file(silence_path)
+            final_audio.export(
+                f"{OUTPUT_PATH}\\{folder_name}\\{index+1}_silence.{sound_format}",
+                format=sound_format,
+            )
+            increment += 1
+
+            generate_audio_xi_labs(
+                script=item["line"],
+                voice="Michael" if item["name"] == "Michael" else "Freya",
+                index=index + 1 + increment,
+                folder_name=folder_name,
+                sound_format=sound_format,
+            )
+        sleep(api_sleep)
 
     merge_sound_file(
         folder_name=folder_name,
