@@ -1,18 +1,31 @@
 from elevenlabs import set_api_key, User
+from configuration import XI_API_KEYS
 
 
-def get_caracters_left(XI_API_KEY: str) -> int:
-    set_api_key(XI_API_KEY)
+def get_characters_left(xi_api_key: str) -> int:
+    set_api_key(xi_api_key)
     user = User.from_api()
-    caracters_left = (
+    characters_left = (
         user.subscription.character_limit - user.subscription.character_count
     )
-    return caracters_left
+    return characters_left
 
 
-def count_caracters(script: list) -> int:
+def is_xi_possible(script: list, xi_api_key: str) -> bool:
+    return (
+        True
+        if get_characters_left(xi_api_key=xi_api_key) - count_characters(script=script)
+        >= 0
+        else False
+    )
+
+
+def count_characters(script: list) -> int:
     return len("".join([item["line"] for item in script]))
 
 
-def is_xi_possible(script: list) -> bool:
-    return True if get_caracters_left() - count_caracters(script=script) >= 0 else False
+def get_xi_api_key(script: str) -> str:
+    for key in XI_API_KEYS:
+        if is_xi_possible(script=script, xi_api_key=key):
+            return key
+    print("You’re broke :(")

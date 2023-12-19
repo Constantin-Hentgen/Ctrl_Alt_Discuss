@@ -1,3 +1,5 @@
+import sys
+
 from elevenlabs import generate, set_api_key, save
 from os import makedirs, remove, listdir
 from pydub import AudioSegment
@@ -9,10 +11,10 @@ from time import sleep
 from re import match
 
 # local imports
+from api_management import get_xi_api_key, get_characters_left, count_characters
 from configuration import (
     XI_TTS_MODEL,
     OUTPUT_PATH,
-    XI_API_KEY,
     ROOT_PATH,
 )
 
@@ -24,15 +26,26 @@ def generate_audio_xi_labs(
     index: int,
     voice: str,
 ) -> None:
-    set_api_key(XI_API_KEY)
-    audio = generate(
-        model=XI_TTS_MODEL,
-        text=script,
-        voice=voice,
-    )
+    xi_api_key = get_xi_api_key(script=script)
 
-    filename = f"{index}_{voice}.{sound_format}"
-    save(audio, f"{OUTPUT_PATH}\\{folder_name}\\voices\\{filename}")
+    if xi_api_key is not None:
+        characters_left = get_characters_left(xi_api_key=xi_api_key)
+        count_characters = count_characters(script=script)
+        print(
+            f"{xi_api_key} - balance:{characters_left} - future balance:{characters_left-count_characters}"
+        )
+
+        set_api_key(xi_api_key)
+        audio = generate(
+            model=XI_TTS_MODEL,
+            text=script,
+            voice=voice,
+        )
+
+        filename = f"{index}_{voice}.{sound_format}"
+        save(audio, f"{OUTPUT_PATH}\\{folder_name}\\voices\\{filename}")
+    else:
+        sys.exit(0)
 
 
 def generate_audio_file(

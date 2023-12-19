@@ -25,6 +25,8 @@ SYSTEM_PROMPT = (
             ]
         }
 
+        There should be 5 items in the script list.
+
         Just return the new content, not the introduction or development content.
         The host Chloe ask the expert on what should we remember after this podcast,
         Then the host conclude and thanks the auditors for listening + close the podcast with a catchy sentence to end on a happy note.

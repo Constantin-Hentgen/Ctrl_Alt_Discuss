@@ -28,6 +28,8 @@ SYSTEM_PROMPT = (
             ]
         }
 
+        There should be 10 items in the script list.
+
         you should build the introduction as following :
             - welcoming the auditors\n
             - Quick introduction of Chloe the host and introduce the expert Michael as an expert friend'\n

@@ -3,4 +3,3 @@ poetry.lock
 output/
 test.py
 .env
-secret.py

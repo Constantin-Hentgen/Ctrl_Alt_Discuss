@@ -28,7 +28,7 @@ SYSTEM_PROMPT = (
 
         You’re not allowed to mention the speakers names but in the JSON Object just write Chloe instead of Host and Michael instead of Guest.
         in the line attribute never use the word 'Chloe' or 'Michael'
-        There should be 6 items in the script list.
+        There should be 7 items in the script list.
         Don’t put again the introduction.
 
         Chloe should barely talk, just asking the expert and let him speak.

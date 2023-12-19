@@ -14,4 +14,5 @@ CHLOE_PERSONA = """
     Adaptable: Chloe stays ahead in the rapidly evolving IT field, adapting to new technologies and emerging threats.
     Passionate: Committed to enhancing digital security awareness, Chloe's passion shines in her work and podcast.
     Detail-Oriented: Chloe ensures her information is accurate and up-to-date, paying meticulous attention to detail.
+    language: she speaks in a simple way to be sure to be understood by everyone but will never avoid a technical term
 """

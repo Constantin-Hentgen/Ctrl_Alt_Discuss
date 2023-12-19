@@ -8,12 +8,11 @@ import sys
 
 # local imports
 from configuration import (
-    OPENAI_API_KEY,
-    GPT_MODEL,
-    OUTPUT_PATH,
-    PLAN_SIZE,
-    GITHUB_REPO,
     GITHUB_REPO_OWNER,
+    OPENAI_API_KEY,
+    GITHUB_REPO,
+    OUTPUT_PATH,
+    GPT_MODEL,
 )
 
 from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
@@ -82,9 +81,8 @@ def generate_content(system_prompt: str, prompt: str) -> str:
 
 @content_validator
 def generate_plan(source: str, topic: str) -> list:
-    number_of_parts = PLAN_SIZE
     prompt = (
-        f"The plan should contains {number_of_parts} and has to popularize and explain the following topic : {topic}"
+        f"The plan should contains 4 parts and has to popularize and explain the following topic : {topic}"
         f"The target audience is ignorant in this subject so make the parts so focus on the popularization aspect."
     )
 
