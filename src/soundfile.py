@@ -29,12 +29,6 @@ def generate_audio_xi_labs(
     xi_api_key = get_xi_api_key(script=script)
 
     if xi_api_key is not None:
-        characters_left = get_characters_left(xi_api_key=xi_api_key)
-        count_characters = count_characters(script=script)
-        print(
-            f"{xi_api_key} - balance:{characters_left} - future balance:{characters_left-count_characters}"
-        )
-
         set_api_key(xi_api_key)
         audio = generate(
             model=XI_TTS_MODEL,

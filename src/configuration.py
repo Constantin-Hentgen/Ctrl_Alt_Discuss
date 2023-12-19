@@ -10,7 +10,7 @@ OUTPUT_PATH = rf"{ROOT_PATH}\output"
 GPT_MODEL = "gpt-3.5-turbo-1106"
 IMAGE_MODEL = "dall-e-3"
 OPENAI_API_KEY = getenv("POETRY_OPENAI_API_KEY")
-XI_API_KEYS = getenv("POETRY_XI_API_KEYS")
+XI_API_KEYS = getenv("POETRY_XI_API_KEYS").split(",")
 
 XI_TTS_MODEL = "eleven_multilingual_v2"
 GITHUB_REPO = "Ctrl_Alt_Discuss"
