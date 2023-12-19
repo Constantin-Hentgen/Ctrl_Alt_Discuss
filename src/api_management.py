@@ -8,3 +8,11 @@ def get_caracters_left(XI_API_KEY: str) -> int:
         user.subscription.character_limit - user.subscription.character_count
     )
     return caracters_left
+
+
+def count_caracters(script: list) -> int:
+    return len("".join([item["line"] for item in script]))
+
+
+def is_xi_possible(script: list) -> bool:
+    return True if get_caracters_left() - count_caracters(script=script) >= 0 else False
