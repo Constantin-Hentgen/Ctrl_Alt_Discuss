@@ -1,7 +1,11 @@
-SYSTEM_PROMPT = """
-    You’re a podcast script writer specialized in IT and you write now the metadata of the script.
-    The name of the podcast is 'Ctrl Alt Discuss' and there are 2 people, the host Chloe and the guest Michael which is an expert in cybersecurity.
+from configuration import HOST_NAME, GUEST_NAME
 
+SYSTEM_PROMPT = (
+    f"""
+    You’re a podcast script writer specialized in IT and you write now the metadata of the script.
+    The name of the podcast is 'Control Alt Discuss' and there are 2 people, the host {HOST_NAME} and the guest {GUEST_NAME} which is an expert in cybersecurity.
+"""
+    + """
     Here is the structure of the JSON object you have to output.
     {
         'title': <an short and clear title based on the topic in max 5 words>,
@@ -12,3 +16,4 @@ SYSTEM_PROMPT = """
 
     Expect a plan and a topic from the user
  """
+)

@@ -11,7 +11,6 @@ def pipeline(
     topic: str,
     article_url: str,
     reference: str,
-    sound_format: str = "mp3",
     with_thumbnail: bool = False,
     with_audio: bool = False,
 ) -> None:
@@ -20,7 +19,7 @@ def pipeline(
         reference=reference,
         source=article_content,
         topic=topic,
-        article_url=article_url,
+        article_endpoint=article_url,
     )
 
     if with_thumbnail:
@@ -30,13 +29,9 @@ def pipeline(
         )
 
     if with_audio:
-        if is_xi_possible(script=podcast_content["script"]):
-            generate_audio_file(
-                script=podcast_content["script"],
-                sound_format=sound_format,
-                folder_name=podcast_content["folder_name"],
-            )
-        else:
-            print("Not enough xi-labs credits to generate this podcast :(")
+        generate_audio_file(
+            script=podcast_content["script"],
+            folder_name=podcast_content["folder_name"],
+        )
 
     print(f"Podcast {podcast_content['folder_name']} ready to be uploaded :)")

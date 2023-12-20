@@ -3,10 +3,9 @@ from pipeline import pipeline
 
 if __name__ == "__main__":
     pipeline(
-        sound_format="mp3",  # only format supported so far :/
-        topic="Stuxnet is a computer worm that was used to attack Iranian nuclear facilities",
-        article_url="https://www.malwarebytes.com/stuxnet",
-        reference="source : malwarebytes.com | Stuxnet is a computer worm that was used to attack Iranian nuclear facilities",
+        topic="The WannaCry ransomware attack was a worldwide cyberattack in May 2017 by the WannaCry ransomware cryptoworm",
+        article_url="https://www.malwarebytes.com/wannacry",
+        reference="source : malwarebytes.com | The WannaCry ransomware attack was a worldwide cyberattack in May 2017 by the WannaCry ransomware cryptoworm",
         with_thumbnail=False,
         with_audio=True,
     )

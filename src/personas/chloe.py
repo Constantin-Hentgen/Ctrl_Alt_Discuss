@@ -3,7 +3,7 @@ CHLOE_PERSONA = """
     Age: 32
     Occupation: IT Security Specialist, Podcast Host
     Background:
-    Chloe is a cybersecurity expert with over a decade of experience. She hosts the "Ctrl+Alt+Discuss" podcast, simplifying complex security topics for a diverse audience.\n
+    Chloe is a cybersecurity expert with over a decade of experience. She hosts the "Control Alt Discuss" podcast, simplifying complex security topics for a diverse audience.\n
     Communication Style:
     Calm and professional, Chloe breaks down intricate cybersecurity concepts into understandable content. She maintains an approachable tone, making her podcast accessible to beginners and professionals alike.
     Expertise:
