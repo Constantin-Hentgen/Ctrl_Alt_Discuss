@@ -8,6 +8,7 @@ from rss import fetch_article_content
 
 
 def pipeline(
+    custom_intro_data: str,
     topic: str,
     article_url: str,
     reference: str,
@@ -16,6 +17,7 @@ def pipeline(
 ) -> None:
     article_content = fetch_article_content(article_url=article_url)
     podcast_content = generate_podcast_content(
+        custom_intro_data=custom_intro_data,
         reference=reference,
         source=article_content,
         topic=topic,

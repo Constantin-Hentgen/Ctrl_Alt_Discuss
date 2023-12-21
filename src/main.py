@@ -3,9 +3,10 @@ from pipeline import pipeline
 
 if __name__ == "__main__":
     pipeline(
-        topic="The Melissa virus is a mass-mailing macro virus released on or around March 26, 1999. ",
-        article_url="https://www.orangecyberdefense.com/fr/insights/blog/ethical-hacking/hacks-de-legende-2-1999-melissa",
-        reference="source : orangecyberdefense.com | The Melissa virus is a mass-mailing macro virus released on or around March 26, 1999. ",
+        custom_intro_data="It’s the Second podcast, and it’s christmas soon. (mention it in the small talk / welcoming)",
+        topic="The evolution of security: the story of Code Red",
+        article_url="https://www.kaspersky.com/blog/history-lessons-code-red/45082/",
+        reference="source : kaspersky.com | The evolution of security: the story of Code Red",
         with_thumbnail=False,
         with_audio=True,
     )

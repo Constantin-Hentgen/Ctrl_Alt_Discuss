@@ -23,4 +23,5 @@ SYSTEM_PROMPT = """
     }
 
     The subject is about Zero day attack or historical cyber attacks, so you have to dig into the technical aspect, the history part just like an investigation and go through it like a story.
+    The parts of the plan has to focus on the attack and the last part can be about how to mitigate / the consequences today.
 """

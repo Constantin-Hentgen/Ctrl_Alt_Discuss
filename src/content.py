@@ -114,8 +114,10 @@ def generate_plan(source: str, topic: str) -> list:
 
 
 @content_validator
-def generate_introduction(plan: str, topic: str, reference: str) -> list:
-    prompt = f"{plan}\n main topic : {topic}\n reference: {reference}"
+def generate_introduction(
+    plan: str, topic: str, reference: str, custom_intro_data: str
+) -> list:
+    prompt = f"{plan}\n main topic : {topic}\n reference: {reference}\n additional informations for the introduction : {custom_intro_data}"
     return generate_content(
         system_prompt=introduction_system_prompt, user_prompt=prompt
     )["script"]
@@ -180,10 +182,16 @@ def generate_metadata(plan: dict, topic: str, article_endpoint: str) -> dict:
 
 
 def generate_podcast_content(
-    reference: str, source: str, topic: str, article_endpoint: str
+    reference: str,
+    source: str,
+    custom_intro_data: str,
+    topic: str,
+    article_endpoint: str,
 ) -> dict:
     plan = generate_plan(source=source, topic=topic)
-    introduction = generate_introduction(plan=plan, reference=reference, topic=topic)
+    introduction = generate_introduction(
+        plan=plan, reference=reference, custom_intro_data=custom_intro_data, topic=topic
+    )
     development = generate_development(
         introduction=introduction, plan=plan, source=source
     )

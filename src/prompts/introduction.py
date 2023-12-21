@@ -43,6 +43,6 @@ SYSTEM_PROMPT = (
             - the introduction ends on {HOST_NAME} inviting the auditors to dive in and invites the auditors to make themselves comfortable and take a drink or a snack.
 
         There should be 10 items in the script list.
-        Expect from the user input the plan, a topic which is gonna be the common thread of the podcast and a reference for the article:
+        Expect from the user input the plan, a topic which is gonna be the common thread of the podcast,a reference for the article and additional informations about the podcast (for example the number of the podcast):
     """
 )
