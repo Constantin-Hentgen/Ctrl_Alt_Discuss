@@ -21,4 +21,6 @@ SYSTEM_PROMPT = """
             }
         ]
     }
+
+    The subject is about Zero day attack or historical cyber attacks, so you have to dig into the technical aspect, the history part just like an investigation and go through it like a story.
 """

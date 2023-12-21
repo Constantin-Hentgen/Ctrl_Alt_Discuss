@@ -35,18 +35,14 @@ SYSTEM_PROMPT = (
         """
     + f"""
 
-        There should be 10 items in the script list.
-
         you should build the introduction as following :
             - welcoming the auditors\n
             - Quick introduction of {HOST_NAME} the host and introduce the expert {GUEST_NAME} as an expert friend'\n
-            - small talk between {HOST_NAME} and {GUEST_NAME}
-            - further friendly small talk linked to cybersecurity
-            - back to the subject with the announcement of a news\n
-            - the introduction ends on {HOST_NAME} inviting the auditors to dive in with the first part of the podcast
+            - small talk between {HOST_NAME} and {GUEST_NAME} and {GUEST_NAME} will answer that he was working on 1 cutting edge IT security subjects that he names.
+            - {HOST_NAME} teases the subject of the podcast.
+            - the introduction ends on {HOST_NAME} inviting the auditors to dive in and invites the auditors to make themselves comfortable and take a drink or a snack.
 
-        When {GUEST_NAME} gives a fact or an opinion, {HOST_NAME} should say something like : "we will come back to that later" instead of "absolutely" for example
-
+        There should be 10 items in the script list.
         Expect from the user input the plan, a topic which is gonna be the common thread of the podcast and a reference for the article:
     """
 )

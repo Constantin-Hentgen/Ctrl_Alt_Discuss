@@ -128,14 +128,10 @@ def generate_development(plan: list, introduction: list, source: str) -> list:
     for part in plan:
         prompt = str(
             (
-                f"\nthe name of the part you have to write is :"
-                f"{part['title']}"
-                f", with the following description : "
-                f"{part['description']}"
-                f"here is the introduction of the podcast : {introduction}",
-                f"\n Here is the source article content:",
-                f"{source}",
-                f"\n Here is the previous parts of the development : \n{development}",
+                f"Follow this description : \n"
+                f"{part['description']}\n"
+                f"Here is the previous parts of the development :\n"
+                f"{development}"
             )
         )
 
