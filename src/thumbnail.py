@@ -1,9 +1,14 @@
+from random import randint
 from openai import OpenAI
 from requests import get
 
 # local imports
-from configuration import IMAGE_MODEL, OPENAI_API_KEY, OUTPUT_PATH
-from content import content_validator
+from configuration import (
+    THUMBNAIL_QUANTITY,
+    OPENAI_API_KEY_IMG,
+    IMAGE_MODEL,
+    OUTPUT_PATH,
+)
 
 
 def download_thumbnail(url: str, save_path: str) -> None:
@@ -19,27 +24,27 @@ def download_thumbnail(url: str, save_path: str) -> None:
         print(f"An error occurred: {e}")
 
 
-@content_validator
 def generate_thumbnail(
     prompt: str,
     folder_name: str,
-    quantity: int = 1,
     pixels: int = 1024,
     model: str = IMAGE_MODEL,
     quality: str = "standard",
 ) -> None:
     print("Thumbnail generation...")
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI(api_key=OPENAI_API_KEY_IMG)
 
     response = client.images.generate(
         model=model,
         prompt=prompt,
         size=f"{pixels}x{pixels}",
         quality=quality,
-        n=quantity,
+        n=THUMBNAIL_QUANTITY,
     )
 
     thumbnail_url = response.data[0].url
-    download_thumbnail(
-        url=thumbnail_url, save_path=f"{OUTPUT_PATH}\\{folder_name}\\thumbnail.png"
-    )
+    if THUMBNAIL_QUANTITY > 1:
+        download_thumbnail(
+            url=thumbnail_url,
+            save_path=f"{OUTPUT_PATH}\\{folder_name}\\thumbnail_{randint(1000000,9999999)}.png",
+        )

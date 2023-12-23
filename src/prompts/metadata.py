@@ -14,6 +14,6 @@ SYSTEM_PROMPT = (
         'folder_name':<the title (suitable for a Windows/Linux filesystem)>,
     }
 
-    Expect a plan and a topic from the user
+    Expect a subject from the user:
  """
 )

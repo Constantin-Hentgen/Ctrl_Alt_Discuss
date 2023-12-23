@@ -36,6 +36,6 @@ SYSTEM_PROMPT = (
         Just return the new content, not the introduction or development content.
         The host {HOST_NAME} ask the expert on what should we remember after this podcast,
         Then the host conclude and thanks the auditors for listening + close the podcast with a catchy sentence to end on a happy note.
-        You should expect the user to input the introduction script and development script.
+        You should expect the user to input the introduction script, the development script and custom outro data to say to the auditors.
     """
 )

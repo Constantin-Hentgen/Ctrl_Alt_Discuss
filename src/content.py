@@ -1,30 +1,36 @@
 from json import loads, dumps, dump
-from datetime import datetime
-import requests
-from openai import OpenAI
 from os import makedirs, getenv
+from datetime import datetime
+from openai import OpenAI
+import requests
 import sys
-
 
 # local imports
 from configuration import (
     MISTRAL_LLM_ENDPOINT,
     MISTRAL_LLM_API_KEY,
+    OPENAI_API_KEY_LLM,
+    CUSTOM_INTRO_DATA,
+    CUSTOM_OUTRO_DATA,
     GITHUB_REPO_OWNER,
-    OPENAI_API_KEY,
     GITHUB_REPO,
+    ARTICLE_URL,
     OUTPUT_PATH,
     OPENAI_LLM,
     LLM_CHOICE,
+    SUBJECT,
 )
+
 
 from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
 from prompts.development import SYSTEM_PROMPT as development_system_prompt
 from prompts.conclusion import SYSTEM_PROMPT as conclusion_system_prompt
-from prompts.plan import SYSTEM_PROMPT as plan_system_prompt
+from prompts.plan_attack import SYSTEM_PROMPT as plan_system_prompt
 from prompts.metadata import (
     SYSTEM_PROMPT as metadata_system_prompt,
 )
+
+from rss import fetch_article_content
 
 
 def content_validator(func):
@@ -65,7 +71,7 @@ def get_latest_release_tag():
 def generate_content(system_prompt: str, user_prompt: str) -> str:
     match LLM_CHOICE:
         case "openai":
-            client = OpenAI(api_key=OPENAI_API_KEY)
+            client = OpenAI(api_key=OPENAI_API_KEY_LLM)
             response = client.chat.completions.create(
                 model=OPENAI_LLM,
                 response_format={"type": "json_object"},
@@ -100,11 +106,9 @@ def generate_content(system_prompt: str, user_prompt: str) -> str:
 
 
 @content_validator
-def generate_plan(source: str, topic: str) -> list:
-    prompt = (
-        f"The plan should contains 4 parts and has to popularize and explain the following topic : {topic}"
-        f"The target audience is ignorant in this subject so make the parts so focus on the popularization aspect."
-    )
+def generate_plan() -> list:
+    source = fetch_article_content(article_url=ARTICLE_URL)
+    prompt = f"The target audience is ignorant in this subject so make the parts so focus on the popularization aspect."
 
     if source is not None:
         prompt += f"\n build the plan with this source : \n {source}"
@@ -114,17 +118,17 @@ def generate_plan(source: str, topic: str) -> list:
 
 
 @content_validator
-def generate_introduction(
-    plan: str, topic: str, reference: str, custom_intro_data: str
-) -> list:
-    prompt = f"{plan}\n main topic : {topic}\n reference: {reference}\n additional informations for the introduction : {custom_intro_data}"
+def generate_introduction(plan: str) -> list:
+    prompt = (
+        f"{plan}\n additional informations for the introduction : {CUSTOM_INTRO_DATA}"
+    )
     return generate_content(
         system_prompt=introduction_system_prompt, user_prompt=prompt
     )["script"]
 
 
 @content_validator
-def generate_development(plan: list, introduction: list, source: str) -> list:
+def generate_development(plan: list, introduction: list) -> list:
     development = []
 
     for part in plan:
@@ -149,17 +153,16 @@ def generate_development(plan: list, introduction: list, source: str) -> list:
 
 @content_validator
 def generate_conclusion(introduction: str, development: list) -> list:
-    prompt = f"introduction : {introduction}, development : {development}"
+    prompt = f"introduction : {introduction}, development : {development}, custom information : {CUSTOM_OUTRO_DATA}"
     return generate_content(system_prompt=conclusion_system_prompt, user_prompt=prompt)[
         "script"
     ]
 
 
 @content_validator
-def generate_metadata(plan: dict, topic: str, article_endpoint: str) -> dict:
-    metadata_prompt = f"plan: {plan}\n topic: {topic}"
+def generate_metadata() -> dict:
     metadata = generate_content(
-        system_prompt=metadata_system_prompt, user_prompt=metadata_prompt
+        system_prompt=metadata_system_prompt, user_prompt=SUBJECT
     )
 
     now = datetime.now()
@@ -172,8 +175,7 @@ def generate_metadata(plan: dict, topic: str, article_endpoint: str) -> dict:
         "llm": OPENAI_LLM,
         "title": metadata["title"],
         "description": metadata["description"],
-        "article_endpoint": article_endpoint,
-        "plan": plan,
+        "article_url": ARTICLE_URL,
         "thumbnail_prompt": metadata["thumbnail_prompt"],
         "folder_name": metadata["folder_name"],
     }
@@ -181,28 +183,17 @@ def generate_metadata(plan: dict, topic: str, article_endpoint: str) -> dict:
     return output
 
 
-def generate_podcast_content(
-    reference: str,
-    source: str,
-    custom_intro_data: str,
-    topic: str,
-    article_endpoint: str,
-) -> dict:
-    plan = generate_plan(source=source, topic=topic)
-    introduction = generate_introduction(
-        plan=plan, reference=reference, custom_intro_data=custom_intro_data, topic=topic
+def generate_podcast_content() -> dict:
+    plan = generate_plan()
+    introduction = generate_introduction(plan=plan)
+    development = generate_development(introduction=introduction, plan=plan)
+    conclusion = generate_conclusion(
+        introduction=introduction,
+        development=development,
     )
-    development = generate_development(
-        introduction=introduction, plan=plan, source=source
-    )
-    conclusion = generate_conclusion(introduction=introduction, development=development)
-    metadata = generate_metadata(
-        plan=plan, topic=topic, article_endpoint=article_endpoint
-    )
+    metadata = generate_metadata()
 
-    transition = [{"name": "Transition"}]
-
-    script = introduction + transition + development + conclusion
+    script = introduction + [{"name": "Transition"}] + development + conclusion
 
     podcast_path = f"{OUTPUT_PATH}\\{metadata['folder_name']}"
     makedirs(podcast_path)
@@ -217,9 +208,6 @@ def generate_podcast_content(
         dump(script, json_file, indent=2)
 
     return {
-        "title": metadata["title"],
-        "description": metadata["description"],
-        "thumbnail_prompt": f"{metadata['thumbnail_prompt']}\n NO WRITING or INSCRIPTIONS",
+        "thumbnail_prompt": metadata["thumbnail_prompt"],
         "folder_name": metadata["folder_name"],
-        "script": script,
     }
