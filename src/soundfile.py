@@ -32,9 +32,17 @@ def rate_limit_prevention(func):
         while True:
             try:
                 func(*args, **kwargs)
-            except elevenlabs.api.error.RateLimitError:
+            except (
+                elevenlabs.api.error.RateLimitError,
+                elevenlabs.api.error.APIError,
+            ) as e:
                 print("\n\nElevenlabs RateLimit :(\n\n")
-                rotate_VPN()
+                while True:
+                    try:
+                        rotate_VPN()
+                        break
+                    except Exception as e:
+                        print(f"Error:{e} \n Retrying...")
                 sleep(5)
                 continue
             break

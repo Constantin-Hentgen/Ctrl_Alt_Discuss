@@ -42,6 +42,7 @@ SYSTEM_PROMPT = (
         Each part is a part of the same podcast episode, At each parts beginning {HOST_NAME} should be introduced.
         Don’t put again the introduction, or introduce the podcast neither.
         Don’t welcome anyone.
+        {HOST_NAME} and {GUEST_NAME} SHOULD NEVER REPEAT THEMSELVES, they should always provide new information and answer exclusively to the questions asked.
 
         {HOST_NAME} and {GUEST_NAME} should use numbers and facts from the article to make their point.
         If {GUEST_NAME} says something complex, {HOST_NAME} ask {GUEST_NAME} to explains in simple terms.

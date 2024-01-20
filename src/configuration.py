@@ -36,11 +36,19 @@ GUEST_VOICE = "Michael"
 GUEST_NAME = "Michael"
 
 SOUND_FORMAT = "mp3"  # only format supported :(
-THUMBNAIL_QUANTITY = 3
+
+WITH_THUMBNAIL = False
+THUMBNAIL_QUANTITY = 1
+THUMBNAIL_PIXELS = 750
 API_SLEEP = 30  # more than 30 is adviced
 
 ## Content
-SUBJECT = "Stuxnet worm"
-CUSTOM_INTRO_DATA = "it’s the podcast number 5"
-CUSTOM_OUTRO_DATA = "Say see you on monday"
-ARTICLE_URL = "https://www.malwarebytes.com/stuxnet"
+DATE = "morning Thursday 5th February 2024"
+SUBJECT = "Quantum Computing Unleashed: Revolutionizing Cybersecurity"
+MODE = "Defense"  # "Attack" || "Defense"
+CUSTOM_INTRO_DATA = "it’s the podcast number 13"
+CUSTOM_OUTRO_DATA = "Say see you next week"
+ARTICLE_URL = ""
+
+
+RSS_FLOWS = ["", ""]

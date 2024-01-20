@@ -28,10 +28,6 @@ SYSTEM_PROMPT = (
             {
                 "title": "Who did it, the authors, the customers, the use of it ?",
                 "description": "Investigation about every stakeholders in the attack, giving insights about people, their relations between eachothers."
-            },
-            {
-                "title": "Is it still in use, is it still dangerous ?",
-                "description": "We can get from Michael some opinion about the experts in IT security : is it still something to fear nowadays."
             }
         ]
     }

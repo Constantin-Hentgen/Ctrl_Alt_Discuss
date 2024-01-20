@@ -1,9 +1,5 @@
-from configuration import HOST_NAME, GUEST_NAME
+from configuration import HOST_NAME, GUEST_NAME, DATE
 from personas.personas import PERSONAS
-from datetime import datetime
-
-current_datetime = datetime.now()
-date = current_datetime.strftime("%d/%m/%Y")
 
 SYSTEM_PROMPT = (
     f"""
@@ -40,7 +36,7 @@ SYSTEM_PROMPT = (
     + f"""
 
         you should build the introduction as following :
-            - welcoming the auditors and giving time context to auditiors ({date} written in a format which can be read out loud)\n
+            - welcoming the auditors and giving time context to auditiors ({DATE} written in a format which can be read out loud)\n
             - Very brief introduction of {HOST_NAME} the host and introduce {GUEST_NAME} (they are both well known from the auditors as it’s not the first episode)'\n
             - small talk between {HOST_NAME} and {GUEST_NAME} and {GUEST_NAME} will say that he prepared or heard about on 1 IT security subjects that he names.
             - {HOST_NAME} teases the subject of the podcast.

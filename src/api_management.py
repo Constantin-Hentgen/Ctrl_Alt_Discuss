@@ -27,3 +27,17 @@ def get_xi_api_key(line: str) -> str:
             )
             return key
     print("You’re broke :(")
+
+
+def is_podcast_possible(script: list) -> bool:
+    super_string = "".join(
+        item["line"] for item in script if item["name"] != "Transition"
+    )
+    return True if len(super_string) <= get_nb_credits_left() else False
+
+
+def get_nb_credits_left() -> int:
+    try:
+        return sum([get_characters_left(xi_api_key=key) for key in XI_API_KEYS])
+    except Exception as e:
+        print(f"Error occurred: {e}")

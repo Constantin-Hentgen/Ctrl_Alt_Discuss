@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 from json import loads, dumps, dump
 from os import makedirs, getenv
 from datetime import datetime
@@ -19,13 +20,15 @@ from configuration import (
     OPENAI_LLM,
     LLM_CHOICE,
     SUBJECT,
+    MODE,
 )
 
 
 from prompts.introduction import SYSTEM_PROMPT as introduction_system_prompt
 from prompts.development import SYSTEM_PROMPT as development_system_prompt
 from prompts.conclusion import SYSTEM_PROMPT as conclusion_system_prompt
-from prompts.plan_attack import SYSTEM_PROMPT as plan_system_prompt
+from prompts.plan_attack import SYSTEM_PROMPT as plan_attack_system_prompt
+from prompts.plan_defense import SYSTEM_PROMPT as plan_defense_system_prompt
 from prompts.metadata import (
     SYSTEM_PROMPT as metadata_system_prompt,
 )
@@ -71,20 +74,25 @@ def get_latest_release_tag():
 def generate_content(system_prompt: str, user_prompt: str) -> str:
     match LLM_CHOICE:
         case "openai":
-            client = OpenAI(api_key=OPENAI_API_KEY_LLM)
-            response = client.chat.completions.create(
-                model=OPENAI_LLM,
-                response_format={"type": "json_object"},
-                messages=[
-                    {
-                        "role": "system",
-                        "content": system_prompt,
-                    },
-                    {"role": "user", "content": user_prompt},
-                ],
-            )
+            while True:
+                try:
+                    client = OpenAI(api_key=OPENAI_API_KEY_LLM)
+                    response = client.chat.completions.create(
+                        model=OPENAI_LLM,
+                        response_format={"type": "json_object"},
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": system_prompt,
+                            },
+                            {"role": "user", "content": user_prompt},
+                        ],
+                    )
 
-            return loads(response.choices[0].message.content)
+                    output = loads(response.choices[0].message.content)
+                    break
+                except JSONDecodeError as e:
+                    print(f"Error: {e} \n Retrying...")
         case "mistral":
             endpoint = MISTRAL_LLM_ENDPOINT
             api_key = MISTRAL_LLM_API_KEY
@@ -104,14 +112,20 @@ def generate_content(system_prompt: str, user_prompt: str) -> str:
             output = response.json()["choices"][0]["message"]["content"]
             return loads(output)
 
+    return output
+
 
 @content_validator
 def generate_plan() -> list:
-    source = fetch_article_content(article_url=ARTICLE_URL)
+    source = fetch_article_content(article_url=ARTICLE_URL) if ARTICLE_URL else ""
     prompt = f"The target audience is ignorant in this subject so make the parts so focus on the popularization aspect."
 
     if source is not None:
         prompt += f"\n build the plan with this source : \n {source}"
+
+    plan_system_prompt = (
+        plan_attack_system_prompt if MODE == "Attack" else plan_defense_system_prompt
+    )
 
     result = generate_content(system_prompt=plan_system_prompt, user_prompt=prompt)
     return result["plan"]

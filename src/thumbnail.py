@@ -6,6 +6,7 @@ from requests import get
 from configuration import (
     THUMBNAIL_QUANTITY,
     OPENAI_API_KEY_IMG,
+    THUMBNAIL_PIXELS,
     IMAGE_MODEL,
     OUTPUT_PATH,
 )
@@ -27,7 +28,7 @@ def download_thumbnail(url: str, save_path: str) -> None:
 def generate_thumbnail(
     prompt: str,
     folder_name: str,
-    pixels: int = 1024,
+    pixels: int = THUMBNAIL_PIXELS,
     model: str = IMAGE_MODEL,
     quality: str = "standard",
 ) -> None:
@@ -43,8 +44,7 @@ def generate_thumbnail(
     )
 
     thumbnail_url = response.data[0].url
-    if THUMBNAIL_QUANTITY > 1:
-        download_thumbnail(
-            url=thumbnail_url,
-            save_path=f"{OUTPUT_PATH}\\{folder_name}\\thumbnail_{randint(1000000,9999999)}.png",
-        )
+    download_thumbnail(
+        url=thumbnail_url,
+        save_path=f"{OUTPUT_PATH}\\{folder_name}\\thumbnail_{randint(1000000,9999999)}.png",
+    )
